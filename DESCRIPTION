@@ -7,13 +7,25 @@ Authors@R:
            role = c("aut", "cre"),
            email = "psychelzh@outlook.com",
            comment = c(ORCID = "0000-0001-9041-1150"))
-Description: This is not really a package. This project is to do data analysis 
-    on cognitive structure based on the data collected from schools using the
-    assessing tools provided by IQUIZOO company.
+Description: This is not really a package. This project is to do data
+    analysis on cognitive structure based on the data collected from
+    schools using the assessing tools provided by IQUIZOO company.
 License: MIT + file LICENSE
+URL: https://github.com/psychelzh/cogstruct
+BugReports: https://github.com/psychelzh/cogstruct/issues
+Depends: 
+    tidyverse
+Imports: 
+    config,
+    dataproc.iquizoo (>= 0.2.5),
+    fst,
+    tarchetypes,
+    tarflow.iquizoo (>= 0.0.0.9005),
+    targets
+Remotes: 
+    psychelzh/dataproc.iquizoo,
+    psychelzh/tarflow.iquizoo
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-URL: https://github.com/psychelzh/cogstruct
-BugReports: https://github.com/psychelzh/cogstruct/issues
