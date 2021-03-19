@@ -21,7 +21,8 @@ Imports:
     fst,
     tarchetypes,
     tarflow.iquizoo (>= 0.0.0.9005),
-    targets
+    targets,
+    visNetwork
 Remotes: 
     psychelzh/dataproc.iquizoo,
     psychelzh/tarflow.iquizoo
