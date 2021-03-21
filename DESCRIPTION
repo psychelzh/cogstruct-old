@@ -17,10 +17,10 @@ Depends:
     tidyverse
 Imports: 
     config,
-    dataproc.iquizoo (>= 0.2.5),
+    dataproc.iquizoo (>= 0.2.6),
     fst,
     tarchetypes,
-    tarflow.iquizoo (>= 0.0.0.9005),
+    tarflow.iquizoo (>= 0.0.1),
     targets,
     visNetwork
 Remotes: 

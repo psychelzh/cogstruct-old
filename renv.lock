@@ -200,9 +200,15 @@
     },
     "dataproc.iquizoo": {
       "Package": "dataproc.iquizoo",
-      "Version": "0.2.5",
-      "Source": "unknown",
-      "Hash": "704f422b4d8db780e4326a6257cdf707"
+      "Version": "0.2.6",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "psychelzh",
+      "RemoteRepo": "dataproc.iquizoo",
+      "RemoteRef": "master",
+      "RemoteSha": "ea00945251d400f7afdb14fe98ec79665aae04b6",
+      "Hash": "3871b449a8549b355c06157eadb44b81"
     },
     "dbplyr": {
       "Package": "dbplyr",
@@ -451,10 +457,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-33",
+      "Version": "1.8-34",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "eb7b6439bc6d812eed2cddba5edc6be3"
+      "Hash": "bd4a6c4b600f58651d60d381b0e9a397"
     },
     "mime": {
       "Package": "mime",
@@ -675,16 +681,16 @@
     },
     "tarflow.iquizoo": {
       "Package": "tarflow.iquizoo",
-      "Version": "0.0.0.9005",
+      "Version": "0.0.1",
       "Source": "GitHub",
-      "Remotes": "psychelzh/dataproc.iquizoo",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "tarflow.iquizoo",
       "RemoteUsername": "psychelzh",
+      "RemoteRepo": "tarflow.iquizoo",
       "RemoteRef": "HEAD",
-      "RemoteSha": "35b558315a62adc4d3f7393f0d97d4c1834c7de0",
-      "Hash": "f3451501102718520315bfcb7cffa44c"
+      "RemoteSha": "289eabe1893ea67a6e5dac330895ce488cbe3cd9",
+      "RemoteHost": "api.github.com",
+      "Remotes": "psychelzh/dataproc.iquizoo",
+      "Hash": "f9d5a1e4b178c76945bab062f14e6d5a"
     },
     "targets": {
       "Package": "targets",
