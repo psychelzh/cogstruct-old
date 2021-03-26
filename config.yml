@@ -1,0 +1,23 @@
+default:
+  # put all the required where filters here
+  where:
+    # examples (you should make sure these filters are valid):
+    # - table: course
+    #   field: Name
+    #   operator: REGEXP
+    #   values: .*
+    # - table: content
+    #   field: Name
+    # # operator of `=` or `IN` can be neglected
+    #   values:
+    #   - 萤火虫
+    #   - 超级秒表
+    - table: base_organization
+      field: Name
+      values:
+      - 黑龙江佳木斯第六小学
+      - 广州市天河区龙洞小学
+      - 北京师范大学南湖附属学校
+    - table: course
+      field: Name
+      values: 2021寒假学习力提升课程
