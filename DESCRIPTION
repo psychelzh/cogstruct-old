@@ -17,7 +17,7 @@ Depends:
     tidyverse
 Imports: 
     config,
-    dataproc.iquizoo (>= 0.2.6),
+    dataproc.iquizoo (>= 0.2.8),
     fst,
     tarchetypes,
     tarflow.iquizoo (>= 0.0.1),
