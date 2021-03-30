@@ -18,6 +18,7 @@ Depends:
 Imports: 
     config,
     dataproc.iquizoo (>= 0.2.8),
+    qs,
     fst,
     tarchetypes,
     tarflow.iquizoo (>= 0.0.1),
