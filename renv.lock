@@ -791,16 +791,16 @@
     },
     "tarflow.iquizoo": {
       "Package": "tarflow.iquizoo",
-      "Version": "0.0.3",
+      "Version": "0.0.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "psychelzh",
       "RemoteRepo": "tarflow.iquizoo",
       "RemoteRef": "HEAD",
-      "RemoteSha": "f856423d474cfbedf61dc3ed81617d650d06f3af",
+      "RemoteSha": "1e185d0493f184e06c74889d4815ec868d094074",
       "RemoteHost": "api.github.com",
       "Remotes": "psychelzh/dataproc.iquizoo",
-      "Hash": "ff4c2a86f68ea6f79d78f4c7fb16ae04"
+      "Hash": "7eba2867147276e36a92b807f572acc4"
     },
     "targets": {
       "Package": "targets",
