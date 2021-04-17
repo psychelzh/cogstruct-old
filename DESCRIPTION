@@ -20,6 +20,7 @@ Imports:
     dataproc.iquizoo (>= 0.2.8),
     fst,
     future,
+    psych,
     qs,
     tarchetypes,
     tarflow.iquizoo (>= 0.0.1),

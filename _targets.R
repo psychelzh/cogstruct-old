@@ -13,21 +13,24 @@ targets_data <- tar_map(
   names = game_name_abbr,
   tar_target(
     data,
-    tarflow.iquizoo::fetch(
-      query_tmpl_data,
-      tarflow.iquizoo::insert_where(
-        config_where,
-        list(table = "content", field = "Id", values = game_id)
-      )
+    tarflow.iquizoo::fetch_single_game(
+      query_tmpl_data, config_where, game_id
     )
   ),
   tar_target(
-    indices,
-    tarflow.iquizoo::calc_indices(data, prep_fun)
+    data_parsed,
+    tarflow.iquizoo::wrangle_data(data)
   ),
   tar_target(
-    indices_smpl,
-    simplify_indices(indices, game_name_abbr)
+    indices,
+    dataproc.iquizoo::preproc_data(
+      data_parsed, prep_fun,
+      by = attr(data_parsed, "name_key")
+    )
+  ),
+  tar_target(
+    indices_widen,
+    widen_indices(indices, game_name_abbr)
   )
 )
 list(
@@ -39,12 +42,7 @@ list(
   tar_file(query_tmpl_games, fs::path("sql", "games.tmpl.sql")),
   targets_data,
   tar_combine(data, targets_data[[1]]),
-  tar_combine(indices, targets_data[[2]]),
-  tar_combine(
-    indices_smpl, targets_data[[3]],
-    command = reduce(
-      list(!!!.x),
-      ~ full_join(.x, .y, by = c("user_id", "times"))
-    )
-  )
+  tar_combine(data_parsed, targets_data[[2]]),
+  tar_combine(indices, targets_data[[3]]),
+  tar_combine(indices_widen, targets_data[[4]])
 )
