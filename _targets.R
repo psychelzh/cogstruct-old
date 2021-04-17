@@ -1,5 +1,6 @@
 library(targets)
 library(tarchetypes)
+purrr::walk(fs::dir_ls("R"), source)
 future::plan(future::multisession)
 search_games_mem <- memoise::memoise(
   tarflow.iquizoo::search_games,
@@ -23,6 +24,10 @@ targets_data <- tar_map(
   tar_target(
     indices,
     tarflow.iquizoo::calc_indices(data, prep_fun)
+  ),
+  tar_target(
+    indices_smpl,
+    simplify_indices(indices, game_name_abbr)
   )
 )
 list(
@@ -34,5 +39,12 @@ list(
   tar_file(query_tmpl_games, fs::path("sql", "games.tmpl.sql")),
   targets_data,
   tar_combine(data, targets_data[[1]]),
-  tar_combine(indices, targets_data[[2]])
+  tar_combine(indices, targets_data[[2]]),
+  tar_combine(
+    indices_smpl, targets_data[[3]],
+    command = reduce(
+      list(!!!.x),
+      ~ full_join(.x, .y, by = c("user_id", "times"))
+    )
+  )
 )
