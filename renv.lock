@@ -470,10 +470,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.31",
+      "Version": "1.32",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c3994c036d19fc22c5e2a209c8298bfb"
+      "Hash": "c9e3c0fffd678c847d9b274c068ca46b"
     },
     "labeling": {
       "Package": "labeling",
@@ -791,16 +791,16 @@
     },
     "tarflow.iquizoo": {
       "Package": "tarflow.iquizoo",
-      "Version": "0.0.4",
+      "Version": "0.0.6",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "psychelzh",
       "RemoteRepo": "tarflow.iquizoo",
       "RemoteRef": "HEAD",
-      "RemoteSha": "1e185d0493f184e06c74889d4815ec868d094074",
+      "RemoteSha": "c022330b150aa4d8b70c10834e0a879a46942a47",
       "RemoteHost": "api.github.com",
       "Remotes": "psychelzh/dataproc.iquizoo",
-      "Hash": "7eba2867147276e36a92b807f572acc4"
+      "Hash": "89814940f727a9d03147373ed421af96"
     },
     "targets": {
       "Package": "targets",
