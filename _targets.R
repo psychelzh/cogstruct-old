@@ -27,10 +27,6 @@ targets_data <- tar_map(
       data_parsed, prep_fun,
       by = attr(data_parsed, "name_key")
     )
-  ),
-  tar_target(
-    indices_widen,
-    widen_indices(indices, game_name_abbr)
   )
 )
 list(
@@ -40,9 +36,5 @@ list(
   tar_fst_tbl(users, tarflow.iquizoo::fetch(query_tmpl_users, config_where)),
   tar_file(query_tmpl_data, fs::path("sql", "data.tmpl.sql")),
   tar_file(query_tmpl_games, fs::path("sql", "games.tmpl.sql")),
-  targets_data,
-  tar_combine(data, targets_data[[1]]),
-  tar_combine(data_parsed, targets_data[[2]]),
-  tar_combine(indices, targets_data[[3]]),
-  tar_combine(indices_widen, targets_data[[4]])
+  targets_data
 )
