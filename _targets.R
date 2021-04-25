@@ -27,6 +27,17 @@ targets_data <- tar_map(
       data_parsed, prep_fun,
       by = attr(data_parsed, "name_key")
     )
+  ),
+  tar_target(
+    config,
+    dplyr::filter(
+      config_resp,
+      .data[["game_name_abbr"]] == game_name_abbr
+    )
+  ),
+  tar_target(
+    resp_check,
+    check_resp_metric(data_parsed, config)
   )
 )
 list(
@@ -36,5 +47,7 @@ list(
   tar_fst_tbl(users, tarflow.iquizoo::fetch(query_tmpl_users, config_where)),
   tar_file(query_tmpl_data, fs::path("sql", "data.tmpl.sql")),
   tar_file(query_tmpl_games, fs::path("sql", "games.tmpl.sql")),
-  targets_data
+  targets_data,
+  tar_file(file_config_resp, "config/config_resp_metric.csv"),
+  tar_target(config_resp, read_csv(file_config_resp, col_types = cols()))
 )
