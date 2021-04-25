@@ -18,7 +18,8 @@ check_resp_metric <- function(data, config) {
   }
   .prepare_resp_metric(data, config) %>%
     mutate(
-      nc_crit = qbinom(0.95, nt, config$chance_acc),
+      nc_min = coalesce(qbinom(0.95, nt, config$chance_acc), -Inf),
+      nc_max = coalesce(qbinom(0.05, nt, config$cheat_acc), Inf),
       nt_min = if (config$resp_type == "required_easy") {
         config$duration * 60 / (config$iti + 3)
       } else {
@@ -34,7 +35,7 @@ check_resp_metric <- function(data, config) {
     ) %>%
     rowwise() %>%
     mutate(
-      nc_okay = nc > nc_crit,
+      nc_okay = between(nc, nc_min, nc_max),
       rr_okay = pm <= 0.2 & between(nt, nt_min, nt_max)
     ) %>%
     ungroup() %>%
@@ -70,7 +71,15 @@ check_resp_metric <- function(data, config) {
           ),
         SRT = ,
         SRTS = ,
-        MltSns = mutate(data, acc = 1L - 2L * (rt == 0))
+        MltSns = mutate(data, acc = 1L - 2L * (rt == 0)),
+        SSTM = ,
+        SSTMSpd = data %>%
+          mutate(
+            stim = dataproc.iquizoo:::parse_char_resp(stim),
+            resp = dataproc.iquizoo:::parse_char_resp(resp),
+            acc = map2(stim, resp, ~ as.integer(.x == .y))
+          ) %>%
+          unnest(acc)
       )
     } else {
       if (is.character(data[[config$name_acc]])) {

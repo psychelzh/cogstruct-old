@@ -13,6 +13,7 @@ This is essentially an expansion of `dataproc.iquizoo::game_info`. They will eve
   - If set as `0`, then the value in `name_acc` is so coded that `0` means error, `1` means correct, and any other values (e.g., `-1`, `99`, `NA`) are treated as no response.
   - If set as `-1`, `0` means no response and there is no error.
 - `chance_acc`: The chance level of accuracy.
+- `cheat_acc`: The cheat level of accuracy. This means if the user is cheating (some games really provides this possibility), the percent of correct response for each trial.
 - `duration`: The maximal lasting time for current game (in minutes). If set to 0, there is no fixed duration because it is adaptive or ended by number of trials.
 - `iti`: The inter trial interval (in seconds).
 - `filter`: The original data of some games need to be filtered before checking.
@@ -23,8 +24,8 @@ There are two major checking. Illustrated as follows.
 
 This check will remove subjects based on the count of correct responses.
 
-- When `chance_acc` is not `0`: A binomial distribution (parameter $n$: the total number of trials, and parameter $p$: the chance level of accuracy) will be used to determine the criterion of the minimal number of correct responses.
-- When `chance_acc` is `0`: Setting chance level to `0` means the chance level is not fixed or very hard to determine. Therefore, there is no theoretical criterion based on probability theory. Currently, there will be ***no checking*** of count of correct responses for this type. <!-- TODO: Try to guess a minimal chance level? -->
+- When `chance_acc` is set: A binomial distribution (parameter $n$: the total number of trials, and parameter $p$: the chance level of accuracy) will be used to determine the criterion of the minimal number of correct responses.
+- When `cheat_acc` is set: A binomial distribution (parameter $n$: the total number of trials, and parameter $p$: the cheat level of accuracy) will be used to determine the criterion of the maximal number of correct responses.
 
 ## Response rate checking
 
