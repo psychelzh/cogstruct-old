@@ -49,5 +49,19 @@ list(
   tar_file(query_tmpl_games, fs::path("sql", "games.tmpl.sql")),
   targets_data,
   tar_file(file_config_resp, "config/config_resp_metric.csv"),
-  tar_target(config_resp, read_csv(file_config_resp, col_types = cols()))
+  tar_target(config_resp, read_csv(file_config_resp, col_types = cols())),
+  tar_combine(
+    indices,
+    targets_data[[3]],
+    command = combine_branches(
+      list(!!!.x),
+      names_to = "index",
+      values_to = "score"
+    )
+  ),
+  tar_combine(
+    resp_check,
+    targets_data[[5]],
+    command = combine_branches(list(!!!.x), stack = FALSE)
+  )
 )
