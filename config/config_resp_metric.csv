@@ -7,7 +7,7 @@ d4995118-c8ed-401d-9eb6-ee729fb98116,超级秒表,Simple Reaction Time Test,SRT,
 8448e9c1-a791-4d6f-9a04-da2a7d7cb3fe,超级秒表极速版,Simple Reaction Time Test (Short Version),SRTS,srt,required,CALCULATED,0,,0,0,
 238faaad-4968-4a91-9c29-84f59da38ad4,城市导航,Location Memory Advanced,LocMemAdv,locmem,required,resplocdist,5,0.23,0,0,
 c26c3b9c-5582-4155-9f76-b31e47c07f2a,吹气球,BART,BART,bart,,,,,,,
-c89ae889-110f-4c57-b201-802374d2f624,词语判断,Lexic,Lexic,countcorrect,required_easy,acc,0,0.5,3,0,
+c89ae889-110f-4c57-b201-802374d2f624,词语判断,Lexic,Lexic,countcorrect,required_easy,acc,0,0.5,3,0,acc != -1
 7034b6f2-0f09-46ea-8b95-634689a8e998,倒背数,Backward Digit Span,BDS,span,required,correctness,0,,0,0,
 8cf5d67b-d853-4acb-a253-a8ff9aa2d486,登陆月球（初级）,Number Line Estimation Junior,NLEJr,nle,required,CALCULATED,1,0.3,0,0,
 5c9e7f8b-41a1-4b31-9d94-63be74e5d806,登陆月球（中级）,Number Line Estimation Medium,NLEMed,nle,required,CALCULATED,10,0.2,0,0,
@@ -15,7 +15,7 @@ c89ae889-110f-4c57-b201-802374d2f624,词语判断,Lexic,Lexic,countcorrect,requi
 1c188618-612a-468c-b0a0-76a4afcdbaa0,多彩文字,Color Stroop Paradigm,ColStrp,congeff,required_easy,acc,0,0.5,3,0,
 697d1de9-d140-4e21-9269-6de08443f784,方块速记,Spatial Short-term Memory Simple,SSTMS,span,required,correctness,0,,0,0,
 1813dfbd-f61e-47f5-aec6-721cde20f838,方向临摹,Judgment of Line Orientation,JLO,jlo,required,CALCULATED,6,0.125,0,0,
-cd0b8686-e775-416e-8a58-31a44f37f239,符号判断,Symbol,Symbol,countcorrect,required_easy,acc,0,0.5,3,0,
+cd0b8686-e775-416e-8a58-31a44f37f239,符号判断,Symbol,Symbol,countcorrect,required_easy,acc,0,0.5,3,0,acc != -1
 e4399b39-92a0-4f44-871c-6108a1b17a63,各得其所,London Tower Test,LdnTwr,london,,,,,,,
 7cb86e74-810d-45a3-ba3c-8b8a9dc6dc1c,过目不忘,Forward Word Span,FWS,span,required,correctness,0,,0,0,
 9a4aad2c-7afc-4c6f-b586-0721ba2e29c8,河道捕鱼,One Back Fishing,OneBackFish,sumweighted,required,acc,0,,0,0,
@@ -38,12 +38,12 @@ bf3e0ca1-0998-4eb7-91ec-500c8199fdb5,明白他的心,Theory of Mind,ToM,countcor
 cab61a44-0891-4d0f-bdc3-aee60f3a5f00,魔术师高级,Three Back Test,Nback3,nback,required,acc,0,0.5,0,0,
 83d5c767-12ae-464b-9892-c3883c3b1a78,魔术师中级,Two Back Test,Nback2,nback,required,acc,0,0.5,0,0,
 bc9f51d0-1d24-4826-a024-67b431741f51,魔术师终极,Four Back Test,Nback4,nback,required,acc,0,0.5,0,0,
-082ea578-9bea-4618-94ac-946b7c1daff6,拼音判断,Pinyin,Pinyin,countcorrect,required_easy,acc,0,0.5,3,0,
+082ea578-9bea-4618-94ac-946b7c1daff6,拼音判断,Pinyin,Pinyin,countcorrect,required_easy,acc,0,0.5,3,0,acc != -1
 3a90d262-2d4f-4628-8902-01cd653f6bf5,请你找茬,Spot the Difference,StD,countcorrect2,required_hard,SEPARATED,0,,3,0,
 4b245057-1fc7-4b88-83e1-9cc8b0448c7a,人工语言-初级,Associative Memory Language Junior,AscLanJr,countcorrect,required,correctness,0,,0,0,
 33cb1542-8736-444d-80b5-4bed6cdac1a5,人工语言-中级,Associative Memory Language Medium,AscLanMd,countcorrect,required,correctness,0,,0,0,
 e563c580-004f-454b-85e1-80a0774df7e2,谁在唱歌,Speech Discrimination,SpchDiscr,span,,,,,,,
-eecc6df6-a95d-4036-aca0-b1aa65b120db,声调判断,Tone,Tone,countcorrect,required_easy,acc,0,0.5,3,0,
+eecc6df6-a95d-4036-aca0-b1aa65b120db,声调判断,Tone,Tone,countcorrect,required_easy,acc,0,0.5,3,0,acc != -1
 ec40acb2-efba-40cd-adbc-fd604668b451,时空相机A,Spatiotemporal Memory A,SpatTempA,locmem2,required,resplocdist,3,0.4,0,0,
 b896281d-9460-450e-9675-47ab3ba1068c,时空相机B,Spatiotemporal Memory B,SpatTempB,locmem2,required,resplocdist,3,0.4,0,0,
 87c63149-07ba-4d34-bcad-7e5fff3b5dc8,视听反应,Multisense,MltSns,multisense,required,CALCULATED,0,,0,0,
@@ -76,7 +76,7 @@ b9f0a08c-48fa-4291-be8a-85d86a4efc89,一心多用,Multiple Task Paradigm,MultiTa
 a8813ba1-9dc0-4949-a9a7-f184ebf68091,宇宙遨游,Space Gatherer,SpaGath,countcorrect,,,,,,,
 de124965-f280-4177-a747-20fe4aba79fa,宇宙黑洞A,Location Memory A,LocMemA,locmem,required,resplocdist,3,0.4,0,0,
 9ca38d8d-a402-49fd-bb5f-aa0f1d499c5e,宇宙黑洞B,Location Memory B,LocMemB,locmem,required,resplocdist,3,0.4,0,0,
-605d5346-5b07-4a9a-b28d-db522de05b02,语义判断,Semanteme,Seman,countcorrect,required_easy,acc,0,0.5,3,0,
+605d5346-5b07-4a9a-b28d-db522de05b02,语义判断,Semanteme,Seman,countcorrect,required_easy,acc,0,0.5,3,0,acc != -1
 f6ec0ad6-6c19-4863-89ca-f365bb172ebe,找不同情绪,Spot the Difference (Emotion Version),StDEmo,countcorrect,,,,,,,
 28ddff7c-396a-4bce-8b16-c3258cd637dc,专注大师,Calculation Speeded Junior,CalcSpdJr,countcorrect,required_easy,acc,0,0.5,5,0,
 4352204f-790c-4f6e-aa8b-4518c9c23c0c,专注大师_高级,Calculation Speeded Advanced,CalcSpdAdv,countcorrect,required_easy,acc,0,0.5,15,0,
@@ -84,7 +84,7 @@ f6ec0ad6-6c19-4863-89ca-f365bb172ebe,找不同情绪,Spot the Difference (Emotio
 ef44f5a5-5134-47da-9c6e-9f2f714f6cfc,捉虫,Continuous Performance Test,CPT,cpt,optional,acc,0,0.5,0,0,
 dad9699d-bf5d-4287-b6e0-27890c821307,捉虫高级版,Test of Variables of Attention,TOVA,cpt,optional,acc,0,0.5,0,0,
 d38a4f12-520a-4b01-86b8-95bd6345896e,捉虫高级简版,Test of Variables of Attention (Short Version),TOVAS,cpt,optional,acc,0,0.5,0,0,
-db0b4727-86f8-40c7-95dd-863197b95c03,字形判断,Orthography,Ortho,countcorrect,required_easy,acc,0,0.5,3,0,
+db0b4727-86f8-40c7-95dd-863197b95c03,字形判断,Orthography,Ortho,countcorrect,required_easy,acc,0,0.5,3,0,acc != -1
 4b72d72d-b6f3-430f-b744-4209fe9508a2,阻挡陨石,Earth Protect,EP,countcorrect,optional,acc,0,0.5,3,0,
 9a7e8886-d69c-4ab2-8899-4fa7150942f0,阻挡陨石极速版,Earth Protect (Short Version),EPS,countcorrect,optional,acc,0,0.5,1,0,
 9e14dbf6-8689-4e45-88e6-472f8f3f2663,Conners行为评定量表,Conners,Conners,sumscore,,,,,,,
@@ -95,8 +95,8 @@ f393282a-e2b1-4f40-a434-b7f7f345d13b,MINIKID,MINIKID,MINIKID,sumscore,,,,,,,
 b4934b88-3e79-4df9-a587-7fe4a353f1c0,儿童版情绪控制问卷,Emotion Control,EmoCtrl,sumscore,,,,,,,
 6c5e0a83-cd50-49bd-b382-2313f04dc4ac,儿童青少年时间管理倾向量表,Time Management,TimeMng,sumscore,,,,,,,
 1125a7cd-bb94-4e6d-8883-900866255cd2,儿童行为量表,Behavior Scale,Bahav,sumscore,,,,,,,
-fe1c2015-ab53-4899-8357-c64dc6aad075,二维心理旋转测试C,Mental Rotation C,MRC,countcorrect,required_hard,acc,0,0.25,15,0,
-8fa69a79-d25b-4079-9d9e-1db817f959b3,二维心理旋转测试D,Mental Rotation D,MRD,countcorrect,required_hard,acc,0,0.25,15,0,
+fe1c2015-ab53-4899-8357-c64dc6aad075,二维心理旋转测试C,Mental Rotation C,MRC,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+8fa69a79-d25b-4079-9d9e-1db817f959b3,二维心理旋转测试D,Mental Rotation D,MRD,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
 b3574337-fd21-483e-9956-b765740633f8,愤怒量表,Anger,Anger,sumscore,,,,,,,
 b5e936fa-3f67-4ad2-96ad-2e1b2f1634a2,孤独感,Loneliness,lone,sumscore,,,,,,,
 6b9793d4-99c7-47cc-ae51-426e19173add,基本信息,Basic Information,Info,sumscore,,,,,,,
@@ -104,36 +104,36 @@ c377e970-38b8-4d3c-a374-0826f5f89a56,情绪调节问卷,Emotion Regulation,EmoRe
 6799a247-736c-466d-92df-fe7449b0da47,情绪觉察问卷(儿童版),Emotion Perception,EmoPerc,sumscore,,,,,,,
 c3183d77-9b3e-45d2-acc7-5635bff64ce7,情绪跷跷板,Emotion Seesaw,EmoSee,sumscore,,,,,,,
 8db8a2f0-4089-4cc7-88de-f1510e65ccc9,人生价值问卷,Life Value,LifeVal,sumscore,,,,,,,
-19c64c85-e049-4f07-98a0-3ba7c6e2f7db,瑞文标准推理,Raven Standard,RavenS,countcorrect,required_hard,acc,0,0.25,15,0,
-98ff7e39-c007-496a-9657-b2be8425d303,瑞文标准推理偶数版,Raven Standard Even,RavenSE,countcorrect,required_hard,acc,0,0.25,15,0,
-b2c2007f-1eac-43cd-b189-b2e8b205505a,瑞文标准推理奇数版,Raven Standard Odd,RavenSO,countcorrect,required_hard,acc,0,0.25,15,0,
-993e97f8-25be-4b20-9fa8-a901c8a6b7e8,瑞文高级推理,Raven Advanced,RavenAdv,countcorrect,required_hard,acc,0,0.25,15,0,
-ad810784-6bef-4277-803d-644a4d5d57f6,三维心理旋转测试A,Mental Rotation 3D A,MR3DA,countcorrect,required_hard,acc,0,0.25,15,0,
-1cee9ffa-6391-4bc1-8a87-2199036e1f6b,三维心理旋转测试B,Mental Rotation 3D B,MR3DB,countcorrect,required_hard,acc,0,0.25,15,0,
-b019d6ec-9e38-497e-8259-8bf7128fe76c,数字归纳推理A,Digit Reasoning Induction A,DRIA,countcorrect,required_hard,acc,0,0.25,15,0,
-3759e0fa-bccd-4539-81fd-73f5671af290,数字归纳推理B,Digit Reasoning Induction B,DRIB,countcorrect,required_hard,acc,0,0.25,15,0,
-816b7e90-49d8-474c-9779-c2193fade13b,数字归纳推理C,Digit Reasoning Induction C,DRIC,countcorrect,required_hard,acc,0,0.25,15,0,
-0c810c88-29ca-4d10-9d2f-9fcc6bed7c9c,数字归纳推理D,Digit Reasoning Induction D,DRID,countcorrect,required_hard,acc,0,0.25,15,0,
-b958aca6-2898-46ec-863e-78254fe21ef8,数字演绎推理,Digit Reasoning Deduction,DRD,countcorrect,required_hard,acc,0,0.25,15,0,
-5b0ae49c-6c85-4804-95e5-490c84fbc343,他/她会怎么想？,Theory of Mind 2,ToM2,countcorrect,,,,,,0,
-26eb4f74-91aa-4965-b542-4cfb77a618be,图形归纳推理A,Non-verbal Reasoning Induction A,NVRIA,countcorrect,required_hard,acc,0,0.25,15,0,
-4e538055-d5a1-4e91-bf6c-93c68cf4de28,图形归纳推理B,Non-verbal Reasoning Induction B,NVRIB,countcorrect,required_hard,acc,0,0.25,15,0,
-8cdf4a64-da33-433e-8048-739145cb482e,图形推理极速版,Nonverbal Reasoning Speeded,NVRSpd,countcorrect,required_hard,acc,0,0.25,15,0,
-ca646547-8ef2-4657-8b9b-35b586073683,图形演绎推理A,Non-verbal Reasoning Deduction A,NVRDA,countcorrect,required_hard,acc,0,0.25,15,0,
-831784bc-2aeb-4a1e-95ed-2df1224836bb,图形演绎推理B,Non-verbal Reasoning Deduction B,NVRDB,countcorrect,required_hard,acc,0,0.25,15,0,
-a0cab4df-f1de-44e2-afbc-2a205d5ca7e4,图形折叠与展开A,Folding A,FOLDA,countcorrect,required_hard,acc,0,0.25,15,0,
-49feab5f-c3e8-4bf3-b58f-63730c616b50,图形折叠与展开B,Folding B,FOLDB,countcorrect,required_hard,acc,0,0.25,15,0,
-11d071cc-7289-429a-a6c5-a552753c52a0,文字推理-初级,Verbal Reasoning Junior,VRJr,countcorrect,required_hard,acc,0,0.25,15,0,
-2b9cd51a-64d6-49b3-8e9c-2db69d21771b,文字推理-高级,Verbal Reasoning Advanced,VRAdv,countcorrect,required_hard,acc,0,0.25,15,0,
+19c64c85-e049-4f07-98a0-3ba7c6e2f7db,瑞文标准推理,Raven Standard,RavenS,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+98ff7e39-c007-496a-9657-b2be8425d303,瑞文标准推理偶数版,Raven Standard Even,RavenSE,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+b2c2007f-1eac-43cd-b189-b2e8b205505a,瑞文标准推理奇数版,Raven Standard Odd,RavenSO,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+993e97f8-25be-4b20-9fa8-a901c8a6b7e8,瑞文高级推理,Raven Advanced,RavenAdv,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+ad810784-6bef-4277-803d-644a4d5d57f6,三维心理旋转测试A,Mental Rotation 3D A,MR3DA,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+1cee9ffa-6391-4bc1-8a87-2199036e1f6b,三维心理旋转测试B,Mental Rotation 3D B,MR3DB,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+b019d6ec-9e38-497e-8259-8bf7128fe76c,数字归纳推理A,Digit Reasoning Induction A,DRIA,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+3759e0fa-bccd-4539-81fd-73f5671af290,数字归纳推理B,Digit Reasoning Induction B,DRIB,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+816b7e90-49d8-474c-9779-c2193fade13b,数字归纳推理C,Digit Reasoning Induction C,DRIC,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+0c810c88-29ca-4d10-9d2f-9fcc6bed7c9c,数字归纳推理D,Digit Reasoning Induction D,DRID,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+b958aca6-2898-46ec-863e-78254fe21ef8,数字演绎推理,Digit Reasoning Deduction,DRD,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+5b0ae49c-6c85-4804-95e5-490c84fbc343,他/她会怎么想？,Theory of Mind 2,ToM2,countcorrect,,,,,,,
+26eb4f74-91aa-4965-b542-4cfb77a618be,图形归纳推理A,Non-verbal Reasoning Induction A,NVRIA,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+4e538055-d5a1-4e91-bf6c-93c68cf4de28,图形归纳推理B,Non-verbal Reasoning Induction B,NVRIB,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+8cdf4a64-da33-433e-8048-739145cb482e,图形推理极速版,Nonverbal Reasoning Speeded,NVRSpd,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+ca646547-8ef2-4657-8b9b-35b586073683,图形演绎推理A,Non-verbal Reasoning Deduction A,NVRDA,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+831784bc-2aeb-4a1e-95ed-2df1224836bb,图形演绎推理B,Non-verbal Reasoning Deduction B,NVRDB,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+a0cab4df-f1de-44e2-afbc-2a205d5ca7e4,图形折叠与展开A,Folding A,FOLDA,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+49feab5f-c3e8-4bf3-b58f-63730c616b50,图形折叠与展开B,Folding B,FOLDB,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+11d071cc-7289-429a-a6c5-a552753c52a0,文字推理-初级,Verbal Reasoning Junior,VRJr,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+2b9cd51a-64d6-49b3-8e9c-2db69d21771b,文字推理-高级,Verbal Reasoning Advanced,VRAdv,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
 7f722c9e-1932-4b6f-b81e-6cd351e858e5,希望量表,Hope,Hope,sumscore,,,,,,,
 17c7ee16-eabc-4bf7-8724-5de2260f4460,小学生学习习惯问卷,Learn Habit,Habit,sumscore,,,,,,,
 fa5b9880-9393-453a-9538-41decd119296,心境焦虑症状,Anxiety,Anxiety,sumscore,,,,,,,
 1b58a7b3-6b2d-4117-a2c4-85f8c8d78e3a,心理健康问卷,Mental Health Scale,MHScale,sumscore,,,,,,,
 10d4c8f4-4a1c-45aa-861a-74e430bdf9ba,心理健康自评量表,Mental Health Self-report,MHSelf,sumscore,,,,,,,
 485a442f-76d8-439c-bf2f-34415366593d,压力事件,Stress,Stress,sumscore,,,,,,,
-617dc922-094c-433d-95f1-03f6489de1b6,远距离联想测试,Remote Association Test,RAT,countcorrect,required_hard,acc,0,,15,0,
-82c50d3a-5a13-451f-ad3a-9b8082731ac9,阅读理解,Reading 2,Reading2,countcorrect,required_hard,acc,0,0.25,15,0,
-2a82342b-f1bf-489e-8dd4-403e708123d1,阅读判断,Reading,Reading,countcorrect,required_hard,acc,0,0.5,15,0,
+617dc922-094c-433d-95f1-03f6489de1b6,远距离联想测试,Remote Association Test,RAT,countcorrect,required_hard,acc,0,,15,0,acc != -1
+82c50d3a-5a13-451f-ad3a-9b8082731ac9,阅读理解,Reading 2,Reading2,countcorrect,required_hard,acc,0,0.25,15,0,acc != -1
+2a82342b-f1bf-489e-8dd4-403e708123d1,阅读判断,Reading,Reading,countcorrect,required_hard,acc,0,0.5,15,0,acc != -1
 6d8e5eb1-fb1f-428f-8518-e2c0ba0b5d4e,在线认知测评知情同意书,Consent,Consent,countcorrect,,,,,,,
 f3d638a3-0c97-4103-8f8d-e537c7a73f0d,长处和困难问卷,Strength Scale,Strength,countcorrect,,,,,,,
 f620d6bb-a2a2-48ec-bbac-c93574672af5,找相同,Find the Same,FtS,sumscore,,,,,,,
