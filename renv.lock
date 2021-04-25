@@ -248,15 +248,15 @@
     },
     "dataproc.iquizoo": {
       "Package": "dataproc.iquizoo",
-      "Version": "1.0.3",
+      "Version": "1.0.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "psychelzh",
       "RemoteRepo": "dataproc.iquizoo",
       "RemoteRef": "master",
-      "RemoteSha": "9931346a6538518aec10b0872cff116652661362",
+      "RemoteSha": "a9ffb1b486bd48e51ca4516b6155cb8c98fc6602",
       "RemoteHost": "api.github.com",
-      "Hash": "25477a881bd46368e3c6268d24c3b438"
+      "Hash": "d27b43724c1e8737d211608b7e19e638"
     },
     "dbplyr": {
       "Package": "dbplyr",
@@ -505,10 +505,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.32",
+      "Version": "1.33",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c9e3c0fffd678c847d9b274c068ca46b"
+      "Hash": "0bc1b5da1b0eb07cd4b727e95e9ff0b8"
     },
     "labeling": {
       "Package": "labeling",
