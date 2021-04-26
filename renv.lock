@@ -343,15 +343,15 @@
     },
     "dataproc.iquizoo": {
       "Package": "dataproc.iquizoo",
-      "Version": "1.0.4",
+      "Version": "1.0.5",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "psychelzh",
       "RemoteRepo": "dataproc.iquizoo",
       "RemoteRef": "master",
-      "RemoteSha": "a9ffb1b486bd48e51ca4516b6155cb8c98fc6602",
+      "RemoteSha": "c9bd276c60f8d44e58e3fc566651eeeb744283fc",
       "RemoteHost": "api.github.com",
-      "Hash": "d27b43724c1e8737d211608b7e19e638"
+      "Hash": "e66f9e6e05ad7d1e7173c396c5bd2ed6"
     },
     "dbplyr": {
       "Package": "dbplyr",
