@@ -19,6 +19,7 @@ Imports:
     config,
     dataproc.iquizoo (>= 0.2.8),
     fst,
+    ggpubr,
     future,
     psych,
     qs,
