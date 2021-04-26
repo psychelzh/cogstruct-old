@@ -7,7 +7,10 @@ search_games_mem <- memoise::memoise(
   cache = cachem::cache_disk("~/.cache.tarflow.iquizoo")
 )
 games <- search_games_mem(config::get("where"))
-tar_option_set(package = c("tidyverse", "dataproc.iquizoo"), imports = "dataproc.iquizoo")
+tar_option_set(
+  package = c("tidyverse", "dataproc.iquizoo", "lubridate", "ggpubr"),
+  imports = "dataproc.iquizoo"
+)
 targets_data <- tar_map(
   values = games,
   names = game_name_abbr,
@@ -42,6 +45,10 @@ targets_data <- tar_map(
   tar_target(
     reliabilities,
     calc_reliability(indices, resp_check)
+  ),
+  tar_target(
+    age_dev_plot,
+    visualize_devlopment(indices, resp_check, users)
   )
 )
 list(
