@@ -70,10 +70,5 @@ list(
       values_to = "score"
     )
   ),
-  tar_combine(
-    resp_check,
-    targets_data[[5]],
-    command = combine_branches(list(!!!.x), stack = FALSE)
-  ),
   tar_combine(reliabilities, targets_data[[6]])
 )
