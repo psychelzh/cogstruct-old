@@ -10,8 +10,17 @@
 #' @author Liang Zhang
 #' @export
 check_resp_metric <- function(data, config) {
+  name_key <- attr(data, "name_key")
   if (is.na(config$resp_type)) {
-    return(NULL)
+    return(
+      data %>%
+        group_by(across(all_of(name_key))) %>%
+        summarise(
+          nc_okay = TRUE,
+          rr_okay = TRUE,
+          .groups = "drop"
+        )
+    )
   }
   if (!is.na(config$filter)) {
     data <- filter(data, !!rlang::parse_expr(config$filter))
@@ -43,9 +52,10 @@ check_resp_metric <- function(data, config) {
 }
 
 .prepare_resp_metric <- function(data, config) {
+  name_key <- attr(data, "name_key")
   if (config$name_acc == "SEPARATED") {
     resp_metric <- data %>%
-      group_by(.id) %>%
+      group_by(across(all_of(name_key))) %>%
       summarise(
         nc = sum(ncorrect),
         nt = nc + sum(ncorrect),
@@ -108,7 +118,7 @@ check_resp_metric <- function(data, config) {
       }
     }
     resp_metric <- data %>%
-      group_by(.id) %>%
+      group_by(across(all_of(name_key))) %>%
       summarise(
         nc = sum(acc == 1),
         nt = n(),

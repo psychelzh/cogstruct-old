@@ -8,15 +8,6 @@
 #' @export
 calc_reliability <- function(indices, resp_check) {
   name_key <- attr(indices, "name_key")
-  resp_check <- (
-    resp_check %||%
-      tibble(
-        "{name_key}" := indices[[name_key]],
-        nc_okay = TRUE,
-        rr_okay = TRUE
-      )
-  ) %>%
-    select(all_of(name_key), nc_okay, rr_okay)
   data_retested <- indices %>%
     left_join(attr(indices, "meta"), by = name_key) %>%
     group_by(user_id, game_id) %>%
@@ -94,6 +85,7 @@ calc_icc3k <- function(data, name_suffix = "") {
   }
   icc <- data %>%
     drop_na() %>%
+    filter(is.finite(time_1), is.finite(time_2)) %>%
     psych::ICC()
   tibble(
     "n{name_suffix}" := pluck(icc, "n.obs"),
