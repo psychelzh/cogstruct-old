@@ -38,6 +38,10 @@ targets_data <- tar_map(
   tar_target(
     resp_check,
     check_resp_metric(data_parsed, config)
+  ),
+  tar_target(
+    reliabilities,
+    calc_reliability(indices, resp_check)
   )
 )
 list(
@@ -63,5 +67,6 @@ list(
     resp_check,
     targets_data[[5]],
     command = combine_branches(list(!!!.x), stack = FALSE)
-  )
+  ),
+  tar_combine(reliabilities, targets_data[[6]])
 )
