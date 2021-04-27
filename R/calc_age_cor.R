@@ -1,0 +1,16 @@
+#' Calculate correlation between score and age
+#'
+#' @title
+#' @param indices_clean
+#' @return
+#' @author Liang Zhang
+#' @export
+calc_age_cor <- function(indices_clean) {
+  indices_clean %>%
+    filter(!is_outlier) %>%
+    group_by(game_id, index) %>%
+    summarise(
+      r = cor(user_age, score),
+      .groups = "drop"
+    )
+}
