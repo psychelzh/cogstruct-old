@@ -8,7 +8,7 @@
 calc_reliability <- function(indices_clean) {
   indices_clean %>%
     group_by(user_id, game_id) %>%
-    filter(max(occasion) == 2) %>%
+    filter(max(occasion) > 1, occasion != 3) %>%
     ungroup() %>%
     group_nest(game_id, index) %>%
     mutate(
