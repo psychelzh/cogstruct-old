@@ -10,6 +10,7 @@ calc_age_cor <- function(indices_clean) {
     filter(!is_outlier, !is.na(score), is.finite(score)) %>%
     group_by(game_id, index) %>%
     summarise(
+      n_normal = n(),
       cor_score_age = cor(user_age, score),
       .groups = "drop"
     )
