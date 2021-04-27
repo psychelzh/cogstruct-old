@@ -10,8 +10,9 @@ This is essentially an expansion of `dataproc.iquizoo::game_info`. They will eve
 - `name_acc`: The column name of accuray in the original data. If not set, the accuracy is not available and *count of correct responses checking* is skipped. There are two special types, and all set as capital case. `"CALCULATED"` means accuaracy can be calculated from other data columns, and `"SEPARATED"` means there are separate correctness and error columns.
 - `crit_acc`: The criterion of correct for accuracy.
   - If set as a *positive number*, then the values in `name_acc` must be no larger than it to be correct (and then correct is recoded to `1` and incorrect `0`).
-  - If set as `0`, then the value in `name_acc` is so coded that `0` means error, `1` means correct, and any other values (e.g., `-1`, `99`, `NA`) are treated as no response.
+  - If set as `0`, the value in `name_acc` is so coded that `0` means error, `1` means correct, and any other values (e.g., `-1`, `99`, `NA`) are treated as no response.
   - If set as `-1`, `0` means no response and there is no error.
+  - If set as `-2`, `0` and `1` have the same meaning as in `0`, but any other values (e.g., `-1`, `99`, `NA`) are treated as error, and there is no trials treated as no response.
 - `chance_acc`: The chance level of accuracy.
 - `cheat_acc`: The cheat level of accuracy. This means if the user is cheating (some games really provides this possibility), the percent of correct response for each trial.
 - `duration`: The maximal lasting time for current game (in minutes). If set to 0, there is no fixed duration because it is adaptive or ended by number of trials.

@@ -115,6 +115,9 @@ check_resp_metric <- function(data, config) {
       } else if (config$crit_acc == -1) {
         data <- data %>%
           mutate(acc = (.data[[config$name_acc]] == 1) * 2L  - 1L)
+      } else if (config$crit_acc == -2) {
+        data <- data %>%
+          mutate(acc = as.integer(.data[[config$name_acc]] == 1))
       }
     }
     resp_metric <- data %>%

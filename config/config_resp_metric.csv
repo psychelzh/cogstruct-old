@@ -21,7 +21,7 @@ e4399b39-92a0-4f44-871c-6108a1b17a63,各得其所,London Tower Test,LdnTwr,londo
 9a4aad2c-7afc-4c6f-b586-0721ba2e29c8,河道捕鱼,One Back Fishing,OneBackFish,sumweighted,required,acc,0,,,0,0,
 ebcab989-3390-446c-ac8f-f61132765f3e,候鸟迁徙,Birds Migration,Birds,complexswitch,required_easy,acc,0,0.5,,6,0.5,
 c175b435-27ed-4eac-9f98-00b4d2f22838,蝴蝶照相机,Symmetry Complex Span,SCSpan,span,required,accsym,0,0.5,,0,0,
-9329db09-3ea5-42d8-a179-d8554b7cce99,欢乐餐厅,Associative Memory,AscMem,countcorrect,required,correctness,0,0.1,,0,0,
+9329db09-3ea5-42d8-a179-d8554b7cce99,欢乐餐厅,Associative Memory,AscMem,countcorrect,required,correctness,-2,0.1,,0,0,"type == ""Deliver"""
 d5d29d3b-2a4c-4e1a-ab8e-b8fcc0fae48b,火眼金睛,Attention Search,AttSrc,countcorrect,required_hard,acc,0,,,3,0,
 b3886679-7004-4581-8cb4-bdd0b5ddc055,九五之集,Number Sets Test,NumSets,countcorrect,required_easy,acc,0,0.5,,2.5,0,
 24b1d4ad-ab3e-4361-8b9b-d1dcb5edf2b9,卡片分类,Card Sorting,CardSort,switchcost,required_easy,acc,0,0.5,,6,1.5,
