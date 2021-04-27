@@ -43,12 +43,16 @@ targets_data <- tar_map(
     check_resp_metric(data_parsed, config)
   ),
   tar_target(
+    indices_clean,
+    cleanse_indices(indices, resp_check, users)
+  ),
+  tar_target(
     reliabilities,
-    calc_reliability(indices, resp_check)
+    calc_reliability(indices_clean)
   ),
   tar_target(
     age_dev_plot,
-    visualize_devlopment(indices, resp_check, users)
+    visualize_devlopment(indices_clean)
   )
 )
 list(
@@ -61,14 +65,6 @@ list(
   targets_data,
   tar_file(file_config_resp, "config/config_resp_metric.csv"),
   tar_target(config_resp, read_csv(file_config_resp, col_types = cols())),
-  tar_combine(
-    indices,
-    targets_data[[3]],
-    command = combine_branches(
-      list(!!!.x),
-      names_to = "index",
-      values_to = "score"
-    )
-  ),
-  tar_combine(reliabilities, targets_data[[6]])
+  tar_combine(indices_clean, targets_data[[6]]),
+  tar_combine(reliabilities, targets_data[[7]])
 )

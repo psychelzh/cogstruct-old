@@ -2,44 +2,27 @@
 #'
 #' @title
 #' @param indices
-#' @param resp_check
 #' @return
 #' @author Liang Zhang
 #' @export
-calc_reliability <- function(indices, resp_check) {
-  name_key <- attr(indices, "name_key")
-  data_retested <- indices %>%
-    left_join(attr(indices, "meta"), by = name_key) %>%
+calc_reliability <- function(indices_clean) {
+  indices_clean %>%
     group_by(user_id, game_id) %>%
-    mutate(times = row_number(game_time)) %>%
-    filter(dplyr::n() > 1L) %>%
+    filter(max(occasion) == 2) %>%
     ungroup() %>%
-    pivot_longer(
-      all_of(setdiff(names(indices), name_key)),
-      names_to = "index",
-      values_to = "score"
-    ) %>%
-    left_join(resp_check, by = name_key)
-  data_retested %>%
     group_nest(game_id, index) %>%
     mutate(
       map_df(data, calc_icc3k, name_suffix = "_with_invalid"),
       map_df(
         data,
         ~ .x %>%
-          filter(nc_okay, rr_okay) %>%
+          filter(is_valid) %>%
           calc_icc3k(name_suffix = "_no_invalid")
       ),
       map_df(
         data,
         ~ .x %>%
-          filter(nc_okay, rr_okay) %>%
-          mutate(
-            score = ifelse(
-              score %in% boxplot.stats(score)$out,
-              NA, score
-            )
-          ) %>%
+          filter(!is_outlier) %>%
           calc_icc3k(name_suffix = "_no_outlier")
       ),
       .keep = "unused"
@@ -58,11 +41,11 @@ calc_icc3k <- function(data, name_suffix = "") {
   data <- data %>%
     pivot_wider(
       user_id,
-      names_from = "times",
+      names_from = "occasion",
       values_from = "score",
-      names_prefix = "time_"
+      names_prefix = "occasion_"
     ) %>%
-    select(time_1, time_2)
+    select(starts_with("occasion"))
   if (nrow(data) <= 1 ||
       # this checks if data from all times are actually the same or not
       length(unique.default(data)) == 1) {
@@ -84,8 +67,12 @@ calc_icc3k <- function(data, name_suffix = "") {
     )
   }
   icc <- data %>%
-    drop_na() %>%
-    filter(is.finite(time_1), is.finite(time_2)) %>%
+    filter(
+      if_all(
+        starts_with("occasion"),
+        ~ !is.na(.x) & is.finite(.x)
+      )
+    ) %>%
     psych::ICC()
   tibble(
     "n{name_suffix}" := pluck(icc, "n.obs"),
