@@ -64,6 +64,7 @@ targets_data <- tar_map(
           theme(plot.title = element_text(hjust = 0.5)),
         width = 6,
         height = 3 * ncol(indices),
+        limitsize = FALSE,
         type = "cairo"
       )
       file_name
