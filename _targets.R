@@ -53,6 +53,21 @@ targets_data <- tar_map(
   tar_target(
     age_dev_plot,
     visualize_devlopment(indices_clean)
+  ),
+  tar_file(
+    file_age_dev, {
+      file_name <- fs::path("image", "age_dev", str_c(game_name_abbr, ".png"))
+      ggsave(
+        file_name,
+        age_dev_plot +
+          labs(title = game_name_en) +
+          theme(plot.title = element_text(hjust = 0.5)),
+        width = 6,
+        height = 3 * ncol(indices),
+        type = "cairo"
+      )
+      file_name
+    }
   )
 )
 list(
