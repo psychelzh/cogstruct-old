@@ -20,7 +20,8 @@ visualize_devlopment <- function(indices_clean) {
     stat_cor(
       cor.coef.name = "r",
       p.accuracy = 0.001,
-      show.legend = FALSE
+      show.legend = FALSE,
+      color = "grey"
     ) +
     facet_wrap(~ index, ncol = 1L, scales = "free_y") +
     theme_pubclean() +
