@@ -51,6 +51,10 @@ targets_data <- tar_map(
     calc_test_retest(indices_clean)
   ),
   tar_target(
+    test_retest_plot,
+    plot_test_retest(indices_clean)
+  ),
+  tar_target(
     age_dev_stats,
     calc_age_dev(indices_clean)
   ),
