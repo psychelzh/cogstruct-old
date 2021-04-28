@@ -35,7 +35,7 @@ visualize_devlopment <- function(indices_clean) {
       plot_lines = map2(
         data, index,
         ~ .x %>%
-          filter(!is_outlier) %>%
+          filter(!is_outlier, !is.na(score), is.finite(score)) %>%
           group_by(user_age_int, user_sex) %>%
           summarise(n = n(), mean_se(score), .groups = "drop") %>%
           ggplot(aes(
