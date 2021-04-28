@@ -18,6 +18,10 @@ cleanse_indices <- function(indices, resp_check, users) {
       user_age = (user_dob %--% game_time) / dyears(),
       user_age_int = round(user_age)
     ) %>%
+    group_by(user_age_int) %>%
+    # remove ages with too few samples
+    filter(n() >= 100) %>%
+    ungroup() %>%
     left_join(indices, by = name_key) %>%
     pivot_longer(
       all_of(setdiff(names(indices), name_key)),
@@ -26,9 +30,6 @@ cleanse_indices <- function(indices, resp_check, users) {
     ) %>%
     left_join(resp_check, by = name_key) %>%
     mutate(is_valid = nc_okay & rr_okay) %>%
-    group_by(user_age_int) %>%
-    # remove ages with too few samples
-    filter(n() >= 100) %>%
     # check outliers
     group_by(index, is_valid) %>%
     mutate(
