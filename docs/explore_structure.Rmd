@@ -23,7 +23,7 @@ targets::tar_load(rmd_child_check_index)
 
 # Age development and Reliability
 
-```{r render-age-dev}
+```{r render-age-dev, results='asis'}
 for (row in seq_len(nrow(games_included))) {
   cur_game_info <- slice(games_included, row)
   knitr::knit_expand(rmd_child_check_index) %>% 

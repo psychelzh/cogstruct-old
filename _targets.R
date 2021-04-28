@@ -50,33 +50,17 @@ targets_data <- tar_map(
     test_retest_stats,
     calc_test_retest(indices_clean)
   ),
-  tar_target(
-    test_retest_plot,
-    plot_test_retest(indices_clean)
+  tar_file(
+    file_test_retest_plot,
+    plot_test_retest(indices_clean, game_name_abbr)
   ),
   tar_target(
     age_dev_stats,
     calc_age_dev(indices_clean)
   ),
-  tar_target(
-    age_dev_plot,
-    plot_age_dev(indices_clean)
-  ),
   tar_file(
-    file_age_dev, {
-      file_name <- fs::path("image", "age_dev", str_c(game_name_abbr, ".png"))
-      ggsave(
-        file_name,
-        age_dev_plot +
-          labs(title = game_name_en) +
-          theme(plot.title = element_text(hjust = 0.5)),
-        width = 10,
-        height = 3 * ncol(indices),
-        limitsize = FALSE,
-        type = "cairo"
-      )
-      file_name
-    }
+    file_age_dev_plot,
+    plot_age_dev(indices_clean, game_name_abbr)
   )
 )
 list(
@@ -114,8 +98,12 @@ list(
     rmd_child_check_index,
     "archetypes/child_check_index.Rmd"
   ),
+  tar_file(
+    rmd_report,
+    "docs/explore_structure.Rmd"
+  ),
   tar_render(
-    efa_report,
+    report,
     "docs/explore_structure.Rmd",
     output_dir = "report"
   )

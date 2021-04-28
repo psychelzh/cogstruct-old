@@ -2,11 +2,13 @@
 #'
 #' @title
 #' @param indices_clean
+#' @param game_name_abbr
 #' @return
 #' @author Liang Zhang
 #' @export
-plot_age_dev <- function(indices_clean) {
-  indices_clean %>%
+plot_age_dev <- function(indices_clean, game_name_abbr) {
+  file_name <- fs::path("image", "age_dev", str_c(game_name_abbr, ".png"))
+  p <- indices_clean %>%
     group_nest(index) %>%
     mutate(
       plot_scatter = map2(
@@ -68,6 +70,15 @@ plot_age_dev <- function(indices_clean) {
     wrap_plots(ncol = 1L) +
     plot_layout(guides = "collect") &
     theme(legend.position = "bottom")
+  ggsave(
+    file_name,
+    p,
+    width = 10,
+    height = 3 * n_distinct(indices_clean$index) + 3,
+    limitsize = FALSE,
+    type = "cairo"
+  )
+  file_name
 }
 
 combine_plots <- function(plot_scatter, plot_distribution, plot_lines, ...) {
