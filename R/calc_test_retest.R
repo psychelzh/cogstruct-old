@@ -56,16 +56,6 @@ calc_icc3k <- function(data, name_suffix = "") {
       )
     )
   }
-  if (nrow(data) <= 1 ||
-      # this checks if data from all times are actually the same or not
-      length(unique.default(data)) == 1) {
-    return(
-      tibble(
-        "n{name_suffix}" := nrow(data),
-        "icc{name_suffix}" := NA
-      )
-    )
-  }
   icc <- data %>%
     filter(
       if_all(
