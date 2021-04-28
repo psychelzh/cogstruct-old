@@ -1,5 +1,5 @@
 ```{r setup-{{cur_game_info$game_name_abbr}}}
-fig_height <- 3 * nrow(
+fig_height <- 3 * ncol(
   targets::tar_read_raw(str_glue("indices_{cur_game_info$game_name_abbr}"))
 )
 ```
