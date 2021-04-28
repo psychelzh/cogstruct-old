@@ -5,7 +5,7 @@
 #' @return
 #' @author Liang Zhang
 #' @export
-calc_age_cor <- function(indices_clean) {
+calc_age_dev <- function(indices_clean) {
   indices_clean %>%
     filter(!is_outlier, !is.na(score), is.finite(score)) %>%
     group_by(game_id, index) %>%

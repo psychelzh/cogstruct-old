@@ -47,16 +47,16 @@ targets_data <- tar_map(
     cleanse_indices(indices, resp_check, users)
   ),
   tar_target(
-    reliabilities,
-    calc_reliability(indices_clean)
+    test_retest_stats,
+    calc_test_retest(indices_clean)
   ),
   tar_target(
     age_dev_stats,
-    calc_age_cor(indices_clean)
+    calc_age_dev(indices_clean)
   ),
   tar_target(
     age_dev_plot,
-    visualize_devlopment(indices_clean)
+    plot_age_dev(indices_clean)
   ),
   tar_file(
     file_age_dev, {
@@ -86,6 +86,5 @@ list(
   tar_file(file_config_resp, "config/config_resp_metric.csv"),
   tar_target(config_resp, read_csv(file_config_resp, col_types = cols())),
   tar_combine(indices_clean, targets_data[[6]]),
-  tar_combine(reliabilities, targets_data[[7]]),
-  tar_combine(age_dev_stats, targets_data[[8]])
+  tar_combine(test_retest_stats, targets_data[[7]]),
 )

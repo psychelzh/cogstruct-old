@@ -1,11 +1,11 @@
 #' Calculate reliability for each measure
 #'
 #' @title
-#' @param indices
+#' @param indices_clean
 #' @return
 #' @author Liang Zhang
 #' @export
-calc_reliability <- function(indices_clean) {
+calc_test_retest <- function(indices_clean) {
   indices_clean %>%
     group_by(user_id, game_id) %>%
     filter(max(occasion) > 1, occasion != 3) %>%

@@ -1,13 +1,11 @@
 #' Plot score versus age scatter graphs
 #'
 #' @title
-#' @param indices
-#' @param resp_check
-#' @param users
+#' @param indices_clean
 #' @return
 #' @author Liang Zhang
 #' @export
-visualize_devlopment <- function(indices_clean) {
+plot_age_dev <- function(indices_clean) {
   indices_clean %>%
     group_nest(index) %>%
     mutate(
@@ -29,7 +27,6 @@ visualize_devlopment <- function(indices_clean) {
             color = "grey"
           ) +
           scale_color_grey(guide = FALSE) +
-          theme_pubclean() +
           labs(x = "Age", y = .y)
       ),
       plot_lines = map2(
@@ -48,12 +45,13 @@ visualize_devlopment <- function(indices_clean) {
           geom_errorbar(position = position_dodge(width = 0.1), width = 0) +
           ggrepel::geom_text_repel(aes(label = n), show.legend = FALSE) +
           scale_color_viridis_d(labels = c(男 = "Male", 女 = "Female")) +
-          theme_pubclean() +
           labs(x = "Age", y = .y, color = "Sex")
       ),
       plot_combined = map2(
         plot_scatter, plot_lines,
-        ~ .x + .y
+        ~ .x + .y &
+          scale_x_continuous(breaks = 1:18) &
+          theme_pubclean()
       )
     ) %>%
     pull(plot_combined) %>%
