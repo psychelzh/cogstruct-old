@@ -1,0 +1,34 @@
+```{r setup-{{cur_game_info$game_name_abbr}}}
+fig_height <- 3 * nrow(
+  targets::tar_read_raw(str_glue("indices_{cur_game_info$game_name_abbr}"))
+)
+```
+
+## {{cur_game_info$game_name}}
+
+* English Name: `r cur_game_info$game_name_en`
+* Abbreviation: `r cur_game_info$game_name_abbr`
+
+### Age development
+
+```{r age-dev-plot-{{cur_game_info$game_name_abbr}}, fig.width=10, fig.height=fig_height}
+targets::tar_read_raw(
+  str_glue("age_dev_plot_{cur_game_info$game_name_abbr}")
+)
+```
+
+### Test-Retest Reliability
+
+```{r test-retest-table-{{cur_game_info$game_name_abbr}}}
+targets::tar_read_raw(
+  str_glue("test_retest_stats_{cur_game_info$game_name_abbr}")
+) %>% 
+  select(-game_id) %>% 
+  knitr::kable(digits = 2)
+```
+
+```{r test-retest-fig-{{cur_game_info$game_name_abbr}}, fig.width=4, fig.height=fig_height}
+targets::tar_read_raw(
+  str_glue("test_retest_plot_{cur_game_info$game_name_abbr}")
+)
+```
