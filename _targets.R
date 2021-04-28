@@ -8,7 +8,7 @@ search_games_mem <- memoise::memoise(
 )
 games <- search_games_mem(config::get("where"))
 tar_option_set(
-  package = c("tidyverse", "dataproc.iquizoo", "lubridate", "ggpubr"),
+  package = c("tidyverse", "dataproc.iquizoo", "lubridate", "ggpubr", "patchwork"),
   imports = "dataproc.iquizoo"
 )
 targets_data <- tar_map(
@@ -66,7 +66,7 @@ targets_data <- tar_map(
         age_dev_plot +
           labs(title = game_name_en) +
           theme(plot.title = element_text(hjust = 0.5)),
-        width = 6,
+        width = 10,
         height = 3 * ncol(indices),
         limitsize = FALSE,
         type = "cairo"

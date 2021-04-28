@@ -12,25 +12,39 @@ plot_age_dev <- function(indices_clean) {
       plot_scatter = map2(
         data, index,
         ~ .x %>%
-          filter(!is_outlier) %>%
-          ggplot(aes(user_age, score, color = is_outlier)) +
-          geom_point(data = .x) +
+          ggplot(aes(user_age, score)) +
+          geom_point() +
           geom_smooth(
             method = "lm",
             formula = y ~ x,
-            color = "grey"
+            color = "darkblue"
           ) +
           stat_cor(
             cor.coef.name = "r",
             p.accuracy = 0.001,
             show.legend = FALSE,
-            color = "grey"
+            color = "darkblue"
           ) +
+          scale_x_continuous(breaks = 1:18) +
           scale_color_grey(guide = FALSE) +
-          labs(x = "Age", y = .y)
+          labs(x = "Age", y = .y) +
+          theme_pubclean()
       ),
-      plot_lines = map2(
+      plot_distribution = map2(
         data, index,
+        ~ .x %>%
+          filter(!is_outlier, !is.na(score), is.finite(score)) %>%
+          ggplot(aes(score)) +
+          geom_histogram(
+            aes(y = after_stat(density)), bins = 30,
+            fill = "white", color = "black"
+          ) +
+          geom_density(color = "lightblue") +
+          coord_flip() +
+          theme_void()
+      ),
+      plot_lines = map(
+        data,
         ~ .x %>%
           filter(!is_outlier, !is.na(score), is.finite(score)) %>%
           group_by(user_age_int, user_sex) %>%
@@ -44,18 +58,19 @@ plot_age_dev <- function(indices_clean) {
           geom_line(position = position_dodge(width = 0.1)) +
           geom_errorbar(position = position_dodge(width = 0.1), width = 0) +
           ggrepel::geom_text_repel(aes(label = n), show.legend = FALSE) +
+          scale_x_continuous(breaks = 1:18) +
           scale_color_viridis_d(labels = c(男 = "Male", 女 = "Female")) +
-          labs(x = "Age", y = .y, color = "Sex")
-      ),
-      plot_combined = map2(
-        plot_scatter, plot_lines,
-        ~ .x + .y &
-          scale_x_continuous(breaks = 1:18) &
+          labs(x = "Age", y = "", color = "Sex") +
           theme_pubclean()
       )
     ) %>%
-    pull(plot_combined) %>%
+    pmap(combine_plots) %>%
     wrap_plots(ncol = 1L) +
     plot_layout(guides = "collect") &
     theme(legend.position = "bottom")
+}
+
+combine_plots <- function(plot_scatter, plot_distribution, plot_lines, ...) {
+  plot_scatter + plot_distribution + plot_lines +
+    plot_layout(widths = c(5, 1, 5))
 }
