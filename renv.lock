@@ -245,6 +245,13 @@
       "Repository": "CRAN",
       "Hash": "f61dbaec772ccd2e17705c1e872e9e7c"
     },
+    "checkmate": {
+      "Package": "checkmate",
+      "Version": "2.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a667800d5f0350371bedeb8b8b950289"
+    },
     "cli": {
       "Package": "cli",
       "Version": "2.4.0",
@@ -272,6 +279,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "abea3384649ef37f60ef51ce002f3547"
+    },
+    "commonmark": {
+      "Package": "commonmark",
+      "Version": "1.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0f22be39ec1d141fd03683c06f3a6e67"
     },
     "config": {
       "Package": "config",
@@ -550,6 +564,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7d7f283939f563670a697165b2cf5560"
+    },
+    "gt": {
+      "Package": "gt",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4eb28493ed31ff8f5f240d0fb5929ecb"
     },
     "gtable": {
       "Package": "gtable",
@@ -1031,6 +1052,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "74b905b0076e1de6e27f540c95ba68d5"
+    },
+    "sass": {
+      "Package": "sass",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3ef1adfe46b7b144b970d74ce33ab0d6"
     },
     "scales": {
       "Package": "scales",

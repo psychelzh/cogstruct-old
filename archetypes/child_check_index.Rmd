@@ -20,9 +20,21 @@ knitr::include_graphics(
 ```{r test-retest-table-{{cur_game_info$game_name_abbr}}}
 targets::tar_read_raw(
   str_glue("test_retest_stats_{cur_game_info$game_name_abbr}")
-) %>% 
+) %>%
   select(-game_id) %>% 
-  knitr::kable(digits = 2)
+  rename_with(
+    ~ .x %>% 
+      str_replace("([^_]+)_(.+)", "\\2.\\1") %>% 
+      str_replace("_", " ") %>% 
+      str_to_title(),
+    -index
+  ) %>% 
+  gt(rowname_col = "index") %>% 
+  tab_stubhead(label = "Index Name") %>% 
+  tab_spanner_delim(delim = ".") %>% 
+  fmt_number(contains("icc")) %>% 
+  fmt_missing(everything()) %>% 
+  tab_options(column_labels.font.weight = "bold")
 ```
 
 ```{r test-retest-fig-{{cur_game_info$game_name_abbr}}}

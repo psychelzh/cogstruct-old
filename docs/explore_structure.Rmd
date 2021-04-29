@@ -12,12 +12,13 @@ output:
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(kableExtra)
+library(gt)
 knitr::opts_knit$set(root.dir = here::here())
 ```
 
 ```{r load-high-level-data}
-targets::tar_load(games_included)
+games_included <- targets::tar_read(games_included) %>% 
+  arrange(game_name)
 targets::tar_load(rmd_child_check_index)
 ```
 
@@ -35,7 +36,7 @@ for (row in seq_len(nrow(games_included))) {
 
 # Use Full Dataset (with invalid users)
 
-```{r prepare-and-verify-complete-data-full}
+```{r prepare-and-verify-complete-data-full, eval=FALSE}
 data <- targets::tar_read(indices_efa_full) %>% 
   select(-user_id)
 kmo <- psych::KMO(data)
@@ -54,14 +55,14 @@ as_tibble_row(kmo_vec) %>%
   ))
 ```
 
-```{r explore-on-complete-data-full}
+```{r explore-on-complete-data-full, eval=FALSE}
 psych::vss(data, n = 20, plot = FALSE)
 cog_struct <- psych::fa(data, nfactors = 5)
 cog_struct
 loadings_struct <- as_tibble(unclass(cog_struct$loadings), rownames = "index")
 ```
 
-```{r visualize-complete-data, fig.height=20, fig.width=9}
+```{r visualize-complete-data, fig.height=20, fig.width=9, eval=FALSE}
 loadings_struct %>% 
   arrange(across(starts_with("MR"), ~ (abs(.x) > 0.4) * abs(.x))) %>% 
   mutate(index = as_factor(index)) %>% 
@@ -76,7 +77,7 @@ loadings_struct %>%
 
 # Use Valid Dataset (with valid users only)
 
-```{r prepare-and-verify-data-valid}
+```{r prepare-and-verify-data-valid, eval=FALSE}
 data <- targets::tar_read(indices_efa_valid) %>% 
   select(-user_id)
 kmo <- psych::KMO(data)
@@ -95,14 +96,14 @@ as_tibble_row(kmo_vec) %>%
   ))
 ```
 
-```{r explore-on-data-valid}
+```{r explore-on-data-valid, eval=FALSE}
 psych::vss(data, n = 20, plot = FALSE)
 cog_struct <- psych::fa(data, nfactors = 5)
 cog_struct
 loadings_struct <- as_tibble(unclass(cog_struct$loadings), rownames = "index")
 ```
 
-```{r visualize-data-valid, fig.height=20, fig.width=8}
+```{r visualize-data-valid, fig.height=20, fig.width=8, eval=FALSE}
 loadings_struct %>% 
   arrange(across(starts_with("MR"), ~ (abs(.x) > 0.4) * abs(.x))) %>% 
   mutate(index = as_factor(index)) %>% 
@@ -117,7 +118,7 @@ loadings_struct %>%
 
 # Use Normal Dataset (no outliers)
 
-```{r prepare-and-verify-data-normal}
+```{r prepare-and-verify-data-normal, eval=FALSE}
 data <- targets::tar_read(indices_efa_normal) %>% 
   select(-user_id)
 kmo <- psych::KMO(data)
@@ -136,14 +137,14 @@ as_tibble_row(kmo_vec) %>%
   ))
 ```
 
-```{r explore-on-data-normal}
+```{r explore-on-data-normal, eval=FALSE}
 psych::vss(data, n = 20, plot = FALSE)
 cog_struct <- psych::fa(data, nfactors = 4)
 cog_struct
 loadings_struct <- as_tibble(unclass(cog_struct$loadings), rownames = "index")
 ```
 
-```{r visualize-data-normal, fig.height=20, fig.width=8}
+```{r visualize-data-normal, fig.height=20, fig.width=8, eval=FALSE}
 loadings_struct %>% 
   arrange(across(starts_with("MR"), ~ (abs(.x) > 0.4) * abs(.x))) %>% 
   mutate(index = as_factor(index)) %>% 

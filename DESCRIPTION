@@ -21,6 +21,7 @@ Imports:
     fst,
     future,
     ggpubr,
+    gt,
     GPArotation,
     here,
     kableExtra,
