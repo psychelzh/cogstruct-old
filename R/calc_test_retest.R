@@ -34,7 +34,7 @@ calc_icc3k <- function(data, name_suffix = "") {
     return(
       tibble(
         "n{name_suffix}" := 0,
-        "icc{name_suffix}" := NA
+        "icc{name_suffix}" := NA_real_
       )
     )
   }
@@ -52,7 +52,7 @@ calc_icc3k <- function(data, name_suffix = "") {
     return(
       tibble(
         "n{name_suffix}" := nrow(data),
-        "icc{name_suffix}" := NA
+        "icc{name_suffix}" := NA_real_
       )
     )
   }
