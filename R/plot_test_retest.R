@@ -34,7 +34,7 @@ plot_test_retest <- function(indices_clean, game_name_abbr) {
   }
   p <- ggplot(data_with_retest, aes(test, retest)) +
     geom_point() +
-    stat_cor(cor.coef.name = "r", p.accuracy = 0.001, color = "darkblue") +
+    stat_cor(cor.coef.name = "r", p.accuracy = 0.001, color = "orange") +
     facet_wrap(~ index, scales = "free", ncol = 1L) +
     labs(x = "Test", y = "Re-Test", color = "") +
     theme_bw() +

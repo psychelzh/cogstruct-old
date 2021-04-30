@@ -34,13 +34,14 @@ plot_age_dev <- function(indices_clean, game_name_abbr) {
           geom_smooth(
             method = "lm",
             formula = y ~ x,
-            color = "darkblue"
+            color = "orange"
           ) +
           stat_cor(
             cor.coef.name = "r",
+            r.accuracy = 0.001,
             p.accuracy = 0.001,
             show.legend = FALSE,
-            color = "darkblue"
+            color = "orange"
           ) +
           scale_x_continuous(breaks = 1:18) +
           scale_color_grey(guide = FALSE) +
