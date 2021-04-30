@@ -254,10 +254,10 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "2.4.0",
+      "Version": "2.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "be982c9bcbfbe9e59c0225b0ed37d47e"
+      "Hash": "a94ba44cee3ea571e813721e64184172"
     },
     "clipr": {
       "Package": "clipr",
@@ -352,15 +352,15 @@
     },
     "dataproc.iquizoo": {
       "Package": "dataproc.iquizoo",
-      "Version": "1.0.5",
+      "Version": "1.1.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "psychelzh",
       "RemoteRepo": "dataproc.iquizoo",
       "RemoteRef": "master",
-      "RemoteSha": "c9bd276c60f8d44e58e3fc566651eeeb744283fc",
+      "RemoteSha": "2589c1a6c0d2a2e03ff898035a27d346c664e663",
       "RemoteHost": "api.github.com",
-      "Hash": "e66f9e6e05ad7d1e7173c396c5bd2ed6"
+      "Hash": "ce74d338f2fec327cde5377ca399b5bd"
     },
     "dbplyr": {
       "Package": "dbplyr",
@@ -399,10 +399,10 @@
     },
     "ellipsis": {
       "Package": "ellipsis",
-      "Version": "0.3.1",
+      "Version": "0.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "fd2844b3a43ae2d27e70ece2df1b4e2a"
+      "Hash": "bb0eec2fe32e88d9e2836c2f73ea2077"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -1152,16 +1152,16 @@
     },
     "tarflow.iquizoo": {
       "Package": "tarflow.iquizoo",
-      "Version": "0.0.7",
+      "Version": "0.1.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "psychelzh",
       "RemoteRepo": "tarflow.iquizoo",
       "RemoteRef": "HEAD",
-      "RemoteSha": "aa2964c7d9f16d26c99ff56660196f11808feeb7",
+      "RemoteSha": "780be46b5549adcbdf01348a782bfe070360a716",
       "RemoteHost": "api.github.com",
       "Remotes": "psychelzh/dataproc.iquizoo",
-      "Hash": "71a134cfc436af0af5fb30a839a004f1"
+      "Hash": "83bfadc80720cf1701a77e34a7f555e2"
     },
     "targets": {
       "Package": "targets",
