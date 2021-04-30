@@ -106,7 +106,7 @@ list(
     report,
     render_report(
       input = rmd_report,
-      output_dir = "reprot",
+      output_dir = "report",
       output_file = "explore_structure.html",
       object = c(
         games_included, rmd_child_check_index,

@@ -12,7 +12,8 @@ render_report <- function(input, output_dir, output_file, ...) {
   rmarkdown::render(
     input,
     output_dir = output_dir,
-    output_file = output_file
+    output_file = output_file,
+    quiet = TRUE
   )
   fs::path(output_dir, output_file)
 }
