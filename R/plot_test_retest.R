@@ -7,7 +7,7 @@
 #' @author Liang Zhang
 #' @export
 plot_test_retest <- function(indices_clean, game_name_abbr) {
-  file_name <- fs::path("image", "test_retest", str_c(game_name_abbr, ".png"))
+  filename <- fs::path("image", "test_retest", str_c(game_name_abbr, ".png"))
   data_with_retest <- indices_clean %>%
     group_by(user_id, game_id) %>%
     filter(!is_outlier) %>%
@@ -21,7 +21,7 @@ plot_test_retest <- function(indices_clean, game_name_abbr) {
     )
   if (nrow(data_with_retest) <= 1) {
     ggsave(
-      file_name,
+      filename,
       grid::grid.text(
         "Not enough retest samples.",
         gp = grid::gpar(fontsize = 20)
@@ -30,22 +30,21 @@ plot_test_retest <- function(indices_clean, game_name_abbr) {
       height = 2,
       type = "cairo"
     )
-    return(file_name)
+    return(filename)
   }
-  p <- ggplot(data_with_retest, aes(test, retest)) +
+  ggplot(data_with_retest, aes(test, retest)) +
     geom_point() +
     stat_cor(cor.coef.name = "r", p.accuracy = 0.001, color = "darkblue") +
     facet_wrap(~ index, scales = "free", ncol = 1L) +
     labs(x = "Test", y = "Re-Test", color = "") +
     theme_bw() +
-    theme(aspect.ratio = 1)
-  ggsave(
-    file_name,
-    p,
-    width = 10,
-    height = 3 * n_distinct(indices_clean$index) + 3,
-    limitsize = FALSE,
-    type = "cairo"
-  )
-  file_name
+    theme(aspect.ratio = 1) %>%
+    ggsave(
+      filename = filename,
+      width = 10,
+      height = 3 * n_distinct(indices_clean$index) + 3,
+      limitsize = FALSE,
+      type = "cairo"
+    )
+  filename
 }

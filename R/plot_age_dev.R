@@ -7,9 +7,23 @@
 #' @author Liang Zhang
 #' @export
 plot_age_dev <- function(indices_clean, game_name_abbr) {
-  file_name <- fs::path("image", "age_dev", str_c(game_name_abbr, ".png"))
-  p <- indices_clean %>%
-    filter(!is_outlier, !is.na(score), is.finite(score)) %>%
+  filename <- fs::path("image", "age_dev", str_c(game_name_abbr, ".png"))
+  data_valid <- indices_clean %>%
+    filter(!is_outlier, !is.na(score), is.finite(score))
+  if (nrow(data_valid) == 0) {
+    ggsave(
+      filename,
+      grid::grid.text(
+        "No valid data samples.",
+        gp = grid::gpar(fontsize = 20)
+      ),
+      width = 5,
+      height = 2,
+      type = "cairo"
+    )
+    return(filename)
+  }
+  data_valid %>%
     group_nest(index) %>%
     mutate(
       plot_scatter = map2(
@@ -68,16 +82,15 @@ plot_age_dev <- function(indices_clean, game_name_abbr) {
     pmap(combine_plots) %>%
     wrap_plots(ncol = 1L) +
     plot_layout(guides = "collect") &
-    theme(legend.position = "bottom")
-  ggsave(
-    file_name,
-    p,
-    width = 10,
-    height = 3 * n_distinct(indices_clean$index) + 3,
-    limitsize = FALSE,
-    type = "cairo"
-  )
-  file_name
+    theme(legend.position = "bottom") %>%
+    ggsave(
+      filename = filename,
+      width = 10,
+      height = 3 * n_distinct(indices_clean$index) + 3,
+      limitsize = FALSE,
+      type = "cairo"
+    )
+  filename
 }
 
 combine_plots <- function(plot_scatter, plot_distribution, plot_lines, ...) {
