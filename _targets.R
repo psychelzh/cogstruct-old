@@ -74,7 +74,9 @@ list(
   tar_target(config_resp, read_csv(file_config_resp, col_types = cols())),
   tar_combine(indices_clean, targets_data[[6]]),
   tar_combine(test_retest_stats, targets_data[[7]]),
+  tar_combine(file_test_retest_plot, targets_data[[8]]),
   tar_combine(age_dev_stats, targets_data[[9]]),
+  tar_combine(file_age_dev_plot, targets_data[[10]]),
   tar_file(file_config_selection, "config/index_selection.csv"),
   tar_target(
     config_selection,
@@ -100,9 +102,17 @@ list(
     rmd_report,
     "docs/explore_structure.Rmd"
   ),
-  tar_render(
+  tar_file(
     report,
-    "docs/explore_structure.Rmd",
-    output_dir = "report"
+    render_report(
+      input = rmd_report,
+      output_dir = "reprot",
+      output_file = "explore_structure.html",
+      object = c(
+        games_included, rmd_child_check_index,
+        test_retest_stats, file_test_retest_plot,
+        file_age_dev_plot
+      )
+    )
   )
 )
