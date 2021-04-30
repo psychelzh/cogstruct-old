@@ -17,8 +17,7 @@ knitr::opts_knit$set(root.dir = here::here())
 ```
 
 ```{r load-high-level-data}
-games_included <- targets::tar_read(games_included) %>% 
-  arrange(game_name)
+games_included <- arrange(targets::tar_read(games_included), game_name)
 targets::tar_load(rmd_child_check_index)
 ```
 
