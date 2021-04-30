@@ -22,14 +22,11 @@ targets_data <- tar_map(
   ),
   tar_target(
     data_parsed,
-    tarflow.iquizoo::wrangle_data(data)
+    wrangle_data(data, name_key = name_key)
   ),
   tar_target(
     indices,
-    preproc_data(
-      data_parsed, prep_fun,
-      by = attr(data_parsed, "name_key")
-    )
+    preproc_data(data_parsed, prep_fun, by = name_key)
   ),
   tar_target(
     config,
@@ -44,7 +41,7 @@ targets_data <- tar_map(
   ),
   tar_target(
     indices_clean,
-    cleanse_indices(indices, resp_check, users)
+    cleanse_indices(indices, resp_check, users, name_key)
   ),
   tar_target(
     test_retest_stats,
@@ -67,6 +64,7 @@ list(
   tar_target(games_included, games),
   tar_file(file_config, "config.yml"),
   tar_target(config_where, config::get("where", file = file_config)),
+  tar_target(name_key, config::get("name_key", file = file_config)),
   tar_file(query_tmpl_users, fs::path("sql", "users.tmpl.sql")),
   tar_fst_tbl(users, tarflow.iquizoo::fetch(query_tmpl_users, config_where)),
   tar_file(query_tmpl_data, fs::path("sql", "data.tmpl.sql")),

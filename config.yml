@@ -21,3 +21,4 @@ default:
     - table: course
       field: Name
       values: 2021寒假学习力提升课程
+  name_key: .id

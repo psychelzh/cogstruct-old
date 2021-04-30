@@ -46,9 +46,7 @@ calc_icc3k <- function(data, name_suffix = "") {
       names_prefix = "occasion_"
     ) %>%
     select(starts_with("occasion"))
-  if (nrow(data) <= 1 ||
-      # this checks if data from all times are actually the same or not
-      length(unique.default(data)) == 1) {
+  if (nrow(data) <= 1) {
     return(
       tibble(
         "n{name_suffix}" := nrow(data),

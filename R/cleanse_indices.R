@@ -4,11 +4,11 @@
 #' @param indices
 #' @param resp_check
 #' @param users
+#' @param name_key
 #' @return
 #' @author Liang Zhang
 #' @export
-cleanse_indices <- function(indices, resp_check, users) {
-  name_key <- attr(indices, "name_key")
+cleanse_indices <- function(indices, resp_check, users, name_key) {
   attr(indices, "meta") %>%
     left_join(users, by = "user_id") %>%
     group_by(user_id) %>%

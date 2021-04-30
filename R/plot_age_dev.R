@@ -9,6 +9,7 @@
 plot_age_dev <- function(indices_clean, game_name_abbr) {
   file_name <- fs::path("image", "age_dev", str_c(game_name_abbr, ".png"))
   p <- indices_clean %>%
+    filter(!is_outlier, !is.na(score), is.finite(score)) %>%
     group_nest(index) %>%
     mutate(
       plot_scatter = map2(
@@ -35,7 +36,6 @@ plot_age_dev <- function(indices_clean, game_name_abbr) {
       plot_distribution = map2(
         data, index,
         ~ .x %>%
-          filter(!is_outlier, !is.na(score), is.finite(score)) %>%
           ggplot(aes(score)) +
           geom_histogram(
             aes(y = after_stat(density)), bins = 30,
@@ -48,7 +48,6 @@ plot_age_dev <- function(indices_clean, game_name_abbr) {
       plot_lines = map(
         data,
         ~ .x %>%
-          filter(!is_outlier, !is.na(score), is.finite(score)) %>%
           group_by(user_age_int, user_sex) %>%
           summarise(n = n(), mean_se(score), .groups = "drop") %>%
           ggplot(aes(
