@@ -32,19 +32,20 @@ plot_test_retest <- function(indices_clean, game_name_abbr) {
     )
     return(filename)
   }
-  ggplot(data_with_retest, aes(test, retest)) +
+  p <- ggplot(data_with_retest, aes(test, retest)) +
     geom_point() +
     stat_cor(cor.coef.name = "r", p.accuracy = 0.001, color = "darkblue") +
     facet_wrap(~ index, scales = "free", ncol = 1L) +
     labs(x = "Test", y = "Re-Test", color = "") +
     theme_bw() +
-    theme(aspect.ratio = 1) %>%
-    ggsave(
-      filename = filename,
-      width = 10,
-      height = 3 * n_distinct(indices_clean$index) + 3,
-      limitsize = FALSE,
-      type = "cairo"
-    )
+    theme(aspect.ratio = 1)
+  ggsave(
+    filename,
+    plot = p,
+    width = 10,
+    height = 3 * n_distinct(indices_clean$index) + 3,
+    limitsize = FALSE,
+    type = "cairo"
+  )
   filename
 }
