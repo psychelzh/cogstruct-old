@@ -64,6 +64,6 @@ calc_icc3k <- function(data, name_suffix = "") {
     psych::ICC()
   tibble(
     "n{name_suffix}" := pluck(icc, "n.obs"),
-    "icc{name_suffix}" := pluck(icc, "results", "ICC", 6)
+    "icc{name_suffix}" := pluck(icc, "results", "ICC", 2)
   )
 }
