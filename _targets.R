@@ -77,23 +77,6 @@ list(
   tar_combine(file_test_retest_plot, targets_data[[8]], format = "file"),
   tar_combine(age_dev_stats, targets_data[[9]]),
   tar_combine(file_age_dev_plot, targets_data[[10]], format = "file"),
-  tar_file(file_config_selection, "config/index_selection.csv"),
-  tar_target(
-    config_selection,
-    read_csv(file_config_selection, col_types = cols())
-  ),
-  tar_target(
-    indices_efa_full,
-    prep_efa_dataset(indices_clean, config_selection)
-  ),
-  tar_target(
-    indices_efa_valid,
-    prep_efa_dataset(indices_clean, config_selection, rm = "invalid")
-  ),
-  tar_target(
-    indices_efa_normal,
-    prep_efa_dataset(indices_clean, config_selection, rm = "outlier")
-  ),
   tar_file(
     rmd_child_check_index,
     "archetypes/child_check_index.Rmd"
