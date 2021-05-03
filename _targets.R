@@ -73,18 +73,18 @@ list(
   tar_file(file_config_resp, "config/config_resp_metric.csv"),
   tar_target(config_resp, read_csv(file_config_resp, col_types = cols())),
   tar_combine(indices_clean, targets_data[[6]]),
-  tar_combine(test_retest_stats, targets_data[[7]]),
+  tar_combine(test_retest_stats_basic, targets_data[[7]]),
   tar_combine(file_test_retest_plot, targets_data[[8]], format = "file"),
   tar_combine(age_dev_stats, targets_data[[9]]),
   tar_combine(file_age_dev_plot, targets_data[[10]], format = "file"),
-  tar_file(
-    rmd_child_check_index,
-    "archetypes/child_check_index.Rmd"
+  tar_target(test_retest_sp_data, prep_test_retest_sp(indices_clean)),
+  tar_target(test_retest_stats_sp, calc_test_retest(test_retest_sp_data)),
+  tar_target(
+    test_retest_stats,
+    bind_rows(test_retest_stats_basic, test_retest_stats_sp)
   ),
-  tar_file(
-    rmd_report,
-    "docs/explore_structure.Rmd"
-  ),
+  tar_file(rmd_child_check_index, "archetypes/child_check_index.Rmd"),
+  tar_file(rmd_report, "docs/explore_structure.Rmd"),
   tar_file(
     report,
     render_report(
