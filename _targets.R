@@ -97,5 +97,8 @@ list(
         file_age_dev_plot
       )
     )
-  )
+  ),
+  tar_file(file_config_sel, "config/index_selection.csv"),
+  tar_target(config_sel, read_csv(file_config_sel, col_types = cols())),
+  tar_target(indices_efa, prep_efa_dataset(indices_clean, config_sel))
 )
