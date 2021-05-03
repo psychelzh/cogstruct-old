@@ -1,0 +1,35 @@
+---
+title: Evalulate game indices
+author: Liang Zhang
+date: "2021-05-03"
+output:
+  html_document:
+    theme: readable
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(gt)
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+```{r load-high-level-data}
+games_included <- targets::tar_read(games_included) %>%
+  arrange(prep_fun_name, game_name)
+targets::tar_load(rmd_child_check_index)
+```
+
+# Age development and Reliability
+
+```{r render-age-dev, results='asis'}
+for (row in seq_len(nrow(games_included))) {
+  cur_game_info <- slice(games_included, row)
+  knitr::knit_expand(rmd_child_check_index) %>%
+    knitr::knit(text = ., quiet = TRUE) %>%
+    cat()
+  cat("\n\n")
+}
+```

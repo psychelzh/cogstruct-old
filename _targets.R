@@ -84,13 +84,13 @@ list(
     bind_rows(test_retest_stats_basic, test_retest_stats_sp)
   ),
   tar_file(rmd_child_check_index, "archetypes/child_check_index.Rmd"),
-  tar_file(rmd_report, "docs/explore_structure.Rmd"),
+  tar_file(rmd_report, "docs/game_evaluation.Rmd"),
   tar_file(
-    report,
+    report_game_evaluation,
     render_report(
       input = rmd_report,
       output_dir = "report",
-      output_file = "explore_structure.html",
+      output_file = "game_evaluation.html",
       object = c(
         games_included, rmd_child_check_index,
         test_retest_stats, file_test_retest_plot,
