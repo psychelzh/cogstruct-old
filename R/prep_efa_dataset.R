@@ -20,7 +20,7 @@ prep_efa_dataset <- function(indices_clean, config_selection, rm = NULL) {
       filter(!is_outlier)
   )
   config_selection %>%
-    filter(type == "efa") %>%
+    filter(!type %in% c("exclude", "outcome")) %>%
     left_join(indices_used, by = c("game_id", "index")) %>%
     filter(occasion == 1) %>%
     mutate(score = score * (-1) ^ inversed) %>%
