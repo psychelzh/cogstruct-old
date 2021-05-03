@@ -12,24 +12,24 @@ calc_test_retest <- function(indices_clean) {
     ungroup() %>%
     group_nest(game_id, index) %>%
     mutate(
-      map_df(data, calc_icc3k, name_suffix = "_with_invalid"),
+      map_df(data, calc_icc, name_suffix = "_with_invalid"),
       map_df(
         data,
         ~ .x %>%
           filter(is_valid) %>%
-          calc_icc3k(name_suffix = "_no_invalid")
+          calc_icc(name_suffix = "_no_invalid")
       ),
       map_df(
         data,
         ~ .x %>%
           filter(!is_outlier) %>%
-          calc_icc3k(name_suffix = "_no_outlier")
+          calc_icc(name_suffix = "_no_outlier")
       ),
       .keep = "unused"
     )
 }
 
-calc_icc3k <- function(data, name_suffix = "") {
+calc_icc <- function(data, name_suffix = "") {
   if (nrow(data) == 0) {
     return(
       tibble(
