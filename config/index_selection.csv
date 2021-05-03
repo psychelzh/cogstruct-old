@@ -286,7 +286,7 @@ c175b435-27ed-4eac-9f98-00b4d2f22838,SCSpan,nc,acc,1
 6ca66b83-d5ef-47ad-8977-6c114598ae2e,MOTS,nc,exclude,
 933d51d5-49de-454a-bb7b-a9481f7244f0,CalcMed,nc,acc,0
 b3886679-7004-4581-8cb4-bdd0b5ddc055,NumSets,nc,acc,0
-5c9e7f8b-41a1-4b31-9d94-63be74e5d806,NLEMed,mean_abs_err,dist,1
+5c9e7f8b-41a1-4b31-9d94-63be74e5d806,NLEMed,mean_abs_err,exclude,
 5c9e7f8b-41a1-4b31-9d94-63be74e5d806,NLEMed,mean_log_err,dist,1
 6d16b4e2-cb8a-4fe7-be67-17aca93ababf,NsymNCmp,mrt,exclude,
 6d16b4e2-cb8a-4fe7-be67-17aca93ababf,NsymNCmp,pc,exclude,
