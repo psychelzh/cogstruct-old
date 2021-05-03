@@ -9,7 +9,7 @@
 #' @export
 prep_efa_dataset <- function(indices_clean, config_selection, rm = NULL) {
   if (is.null(rm)) {
-    rm <- "none"
+    rm <- "outlier"
   }
   indices_used <- switch(
     rm,
