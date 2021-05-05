@@ -43,13 +43,11 @@ targets_data <- tar_map(
     indices_clean,
     cleanse_indices(indices, resp_check, users, name_key)
   ),
-  tar_target(
-    test_retest_stats,
-    calc_test_retest(indices_clean)
-  ),
+  tar_target(test_retest_data, prep_test_retest(indices_clean)),
+  tar_target(test_retest_stats, calc_test_retest(test_retest_data)),
   tar_file(
     file_test_retest_plot,
-    plot_test_retest(indices_clean, game_name_abbr)
+    plot_test_retest(test_retest_data, game_name_abbr)
   ),
   tar_target(
     age_dev_stats,
@@ -73,10 +71,10 @@ list(
   tar_file(file_config_resp, "config/config_resp_metric.csv"),
   tar_target(config_resp, read_csv(file_config_resp, col_types = cols())),
   tar_combine(indices_clean, targets_data[[6]]),
-  tar_combine(test_retest_stats_basic, targets_data[[7]]),
-  tar_combine(file_test_retest_plot, targets_data[[8]], format = "file"),
-  tar_combine(age_dev_stats, targets_data[[9]]),
-  tar_combine(file_age_dev_plot, targets_data[[10]], format = "file"),
+  tar_combine(test_retest_stats_basic, targets_data[[8]]),
+  tar_combine(file_test_retest_plot, targets_data[[9]], format = "file"),
+  tar_combine(age_dev_stats, targets_data[[10]]),
+  tar_combine(file_age_dev_plot, targets_data[[11]], format = "file"),
   tar_target(test_retest_sp_data, prep_test_retest_sp(indices_clean)),
   tar_target(test_retest_stats_sp, calc_test_retest(test_retest_sp_data)),
   tar_target(

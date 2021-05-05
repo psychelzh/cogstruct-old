@@ -1,28 +1,32 @@
 #' Calculate reliability for each measure
 #'
 #' @title
-#' @param indices_clean
+#' @param test_retest_data
 #' @return
 #' @author Liang Zhang
 #' @export
-calc_test_retest <- function(indices_clean) {
-  indices_clean %>%
-    group_by(user_id, game_id) %>%
-    filter(max(occasion) > 1, occasion != 3) %>%
-    ungroup() %>%
+calc_test_retest <- function(test_retest_data) {
+  test_retest_data %>%
     group_nest(game_id, index) %>%
     mutate(
-      map_df(data, calc_icc, name_suffix = "_with_invalid"),
+      map_df(
+        data,
+        ~ .x %>%
+          select(test, retest) %>%
+          calc_icc(name_suffix = "_with_invalid")
+      ),
       map_df(
         data,
         ~ .x %>%
           filter(is_valid) %>%
+          select(test, retest) %>%
           calc_icc(name_suffix = "_no_invalid")
       ),
       map_df(
         data,
         ~ .x %>%
           filter(!is_outlier) %>%
+          select(test, retest) %>%
           calc_icc(name_suffix = "_no_outlier")
       ),
       .keep = "unused"
@@ -30,22 +34,6 @@ calc_test_retest <- function(indices_clean) {
 }
 
 calc_icc <- function(data, name_suffix = "") {
-  if (nrow(data) == 0) {
-    return(
-      tibble(
-        "n{name_suffix}" := 0,
-        "icc{name_suffix}" := NA_real_
-      )
-    )
-  }
-  data <- data %>%
-    pivot_wider(
-      user_id,
-      names_from = "occasion",
-      values_from = "score",
-      names_prefix = "occasion_"
-    ) %>%
-    select(starts_with("occasion"))
   if (nrow(data) <= 1) {
     return(
       tibble(
@@ -55,12 +43,7 @@ calc_icc <- function(data, name_suffix = "") {
     )
   }
   icc <- data %>%
-    filter(
-      if_all(
-        starts_with("occasion"),
-        ~ !is.na(.x) & is.finite(.x)
-      )
-    ) %>%
+    filter(if_all(.fns = ~ !is.na(.x) & is.finite(.x))) %>%
     psych::ICC()
   tibble(
     "n{name_suffix}" := pluck(icc, "n.obs"),
