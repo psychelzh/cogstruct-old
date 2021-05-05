@@ -3,6 +3,28 @@
 * English Name: `r cur_game_info$game_name_en`
 * Abbreviation: `r cur_game_info$game_name_abbr`
 
+### Basic Information
+
+```{r basic-info-table-{{cur_game_info$game_name_abbr}}}
+targets::tar_read_raw(
+  str_glue("indices_clean_{cur_game_info$game_name_abbr}")
+) %>%
+  group_by(index) %>%
+  group_modify(
+    ~ .x %>%
+      summarise(
+        N_Total = n(),
+        N_Invalid = sum(is.na(is_valid) | !is_valid),
+        N_Outlier = sum(!is.na(is_valid) & is_valid & is_outlier)
+      )
+  ) %>%
+  ungroup() %>%
+  gt(rowname_col = "index") %>%
+  tab_stubhead(label = "Index Name") %>%
+  tab_spanner_delim(delim = "_") %>%
+  tab_options(column_labels.font.weight = "bold")
+```
+
 ### Age development
 
 ```{r age-dev-plot-{{cur_game_info$game_name_abbr}}}
@@ -21,19 +43,19 @@ knitr::include_graphics(
 targets::tar_read_raw(
   str_glue("test_retest_stats_{cur_game_info$game_name_abbr}")
 ) %>%
-  select(-game_id) %>% 
+  select(-game_id) %>%
   rename_with(
-    ~ .x %>% 
-      str_replace("([^_]+)_(.+)", "\\2.\\1") %>% 
-      str_replace("_", " ") %>% 
+    ~ .x %>%
+      str_replace("([^_]+)_(.+)", "\\2.\\1") %>%
+      str_replace("_", " ") %>%
       str_to_title(),
     -index
-  ) %>% 
-  gt(rowname_col = "index") %>% 
-  tab_stubhead(label = "Index Name") %>% 
-  tab_spanner_delim(delim = ".") %>% 
-  fmt_number(contains("icc")) %>% 
-  fmt_missing(everything()) %>% 
+  ) %>%
+  gt(rowname_col = "index") %>%
+  tab_stubhead(label = "Index Name") %>%
+  tab_spanner_delim(delim = ".") %>%
+  fmt_number(contains("icc")) %>%
+  fmt_missing(everything()) %>%
   tab_options(column_labels.font.weight = "bold")
 ```
 
