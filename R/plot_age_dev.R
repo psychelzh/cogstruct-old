@@ -44,7 +44,6 @@ plot_age_dev <- function(indices_clean, game_name_abbr) {
             color = "orange"
           ) +
           scale_x_continuous(breaks = 1:18) +
-          scale_color_grey(guide = FALSE) +
           labs(x = "Age", y = .y) +
           theme_pubclean()
       ),
