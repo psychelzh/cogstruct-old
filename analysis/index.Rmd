@@ -8,4 +8,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+The analysis mainly contains two parts: 
+
+- Data cleaning and checking along with test-retest reliability analysis.
+- Exploratory factor analysis to crack the structure of cognition.
+- Prediction of behavior based on the structure of cognition.
