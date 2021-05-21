@@ -10,7 +10,7 @@ Authors@R:
 Description: This is not really a package. This project is to do data
     analysis on cognitive structure based on the data collected from
     schools using the assessing tools provided by IQUIZOO company.
-License: MIT + file LICENSE
+License: CC BY 4.0
 URL: https://github.com/psychelzh/cogstruct
 BugReports: https://github.com/psychelzh/cogstruct/issues
 Depends: 
