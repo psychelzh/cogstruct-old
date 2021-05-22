@@ -82,20 +82,6 @@ list(
     bind_rows(test_retest_stats_basic, test_retest_stats_sp)
   ),
   tar_file(rmd_child_check_index, "archetypes/child_check_index.Rmd"),
-  tar_file(rmd_report, "analysis/game_evaluation.Rmd"),
-  tar_file(
-    report_game_evaluation,
-    render_report(
-      input = rmd_report,
-      output_dir = "report",
-      output_file = "game_evaluation.html",
-      object = c(
-        games_included, rmd_child_check_index,
-        test_retest_stats, file_test_retest_plot,
-        file_age_dev_plot
-      )
-    )
-  ),
   tar_file(file_config_sel, "config/index_selection.csv"),
   tar_target(config_sel, read_csv(file_config_sel, col_types = cols())),
   tar_target(indices_efa, prep_efa_dataset(indices_clean, config_sel, rm = "invalid"))
