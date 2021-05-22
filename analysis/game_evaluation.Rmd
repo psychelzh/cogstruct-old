@@ -1,13 +1,14 @@
 ---
-title: Evalulate game indices
-author: Liang Zhang
-date: "2021-05-03"
+title: "game_evaluation"
+author: "Liang Zhang"
+date: "2021-05-21"
 output:
-  html_document:
-    theme: readable
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
     code_folding: hide
-    toc: true
-    toc_float: true
+    theme: flatly
+    highlight: textmate
 ---
 
 ```{r setup, include=FALSE}
@@ -24,11 +25,12 @@ targets::tar_load(rmd_child_check_index)
 
 # Age development and Reliability
 
-```{r render-age-dev, results='asis'}
+```{r render-check-main, results='asis'}
+knit_text <- \(text, ...) knitr::knit(text = text, ...)
 for (row in seq_len(nrow(games_included))) {
   cur_game_info <- slice(games_included, row)
-  knitr::knit_expand(rmd_child_check_index) %>%
-    knitr::knit(text = ., quiet = TRUE) %>%
+  knitr::knit_expand(rmd_child_check_index) |> 
+    knit_text(quiet = TRUE) |> 
     cat()
   cat("\n\n")
 }

@@ -28,13 +28,15 @@ targets::tar_read_raw(
 ### Age development
 
 ```{r age-dev-plot-{{cur_game_info$game_name_abbr}}}
-knitr::include_graphics(
-  here::here(
-    targets::tar_read_raw(
-      str_glue("file_age_dev_plot_{cur_game_info$game_name_abbr}")
-    )
-  )
-)
+fig_disp <- targets::tar_read_raw(str_glue("file_age_dev_plot_{cur_game_info$game_name_abbr}"))
+if (rmarkdown::all_output_formats(knitr::current_input(dir = TRUE)) == "workflowr::wflow_html") {
+  fig_disp_real <- here::here("docs", fig_disp)
+  if (!fs::file_exists(fig_disp_real)) {
+    fs::dir_create(fs::path_dir(fig_disp_real))
+    fs::file_copy(here::here(fig_disp), here::here("docs", fig_disp))
+  }
+}
+knitr::include_graphics(fig_disp, error = FALSE)
 ```
 
 ### Test-Retest Reliability
@@ -60,11 +62,13 @@ targets::tar_read_raw(
 ```
 
 ```{r test-retest-fig-{{cur_game_info$game_name_abbr}}}
-knitr::include_graphics(
-  here::here(
-    targets::tar_read_raw(
-      str_glue("file_test_retest_plot_{cur_game_info$game_name_abbr}")
-    )
-  )
-)
+fig_disp <- targets::tar_read_raw(str_glue("file_test_retest_plot_{cur_game_info$game_name_abbr}"))
+if (rmarkdown::all_output_formats(knitr::current_input(dir = TRUE)) == "workflowr::wflow_html") {
+  fig_disp_real <- here::here("docs", fig_disp)
+  if (!fs::file_exists(fig_disp_real)) {
+    fs::dir_create(fs::path_dir(fig_disp_real))
+    fs::file_copy(here::here(fig_disp), here::here("docs", fig_disp))
+  }
+}
+knitr::include_graphics(fig_disp, error = FALSE)
 ```
