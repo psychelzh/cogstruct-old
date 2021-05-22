@@ -1,0 +1,106 @@
+---
+title: "explore_structure"
+author: "Liang Zhang"
+date: "2021-05-22"
+output: 
+  workflowr::wflow_html:
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(corrr)
+library(gt)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+```{r load-dataset}
+data <- targets::tar_read(indices_efa) %>%
+  select(-user_id) %>%
+  slice(which(naniar::prop_miss_row(.) < 0.2))
+```
+
+# Exploratory Factor analysis
+
+```{r game-evaluatio-results}
+combine_checks <- dataproc.iquizoo::game_info %>%
+  inner_join(targets::tar_read(age_dev_stats), by = "game_id") %>%
+  left_join(targets::tar_read(test_retest_stats), by = c("game_id", "index")) %>%
+  left_join(targets::tar_read(config_sel), by = c("game_id", "game_name_abbr", "index")) %>%
+  mutate(abs_cor_score_age = abs(cor_score_age), .after = cor_score_age) %>%
+  filter(!type %in% c("exclude", "outcome")) %>%
+  arrange(prep_fun_name, game_name, index)
+plotly::plot_ly(
+  combine_checks,
+  x = ~ icc_no_outlier,
+  y = ~ abs_cor_score_age,
+  color = ~ type,
+  colors = viridisLite::viridis(5),
+  type = "scatter",
+  mode = "markers",
+  text = ~ paste("Game: ", game_name, "<br>Index: ", index)
+) %>%
+  layout(
+    xaxis = list(
+      title = "Test-Retest Reliability",
+      hoverformat = ".2f"
+    ),
+    yaxis = list(
+      scaleanchor = "x",
+      title = "Age Correlation (Absolute)",
+      hoverformat = ".2f"
+    )
+  )
+```
+
+## Visualize raw data
+
+```{r visualize-raw, fig.width=16, fig.height=14}
+naniar::vis_miss(data, cluster = TRUE)
+count_pairs <- psych::pairwiseCount(data)
+order <- corrplot::corrMatOrder(count_pairs, order = "FPC")
+count_pairs[order, order] %>%
+  as_tibble(rownames = "term") %>%
+  pivot_longer(!term, names_to = "term2", values_to = "n") %>%
+  mutate(across(starts_with("term"), as_factor)) %>%
+  ggplot(aes(term, term2, fill = n)) +
+  geom_tile() +
+  scale_fill_binned(type = "viridis") +
+  labs(x = "", y = "", fill = "Count") +
+  coord_fixed() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+corrr::correlate(data, quiet = TRUE) %>%
+  rearrange(method = "HC") %>%
+  stretch() %>%
+  mutate(across(c(x, y), as_factor)) %>%
+  ggplot(aes(x, y, fill = r)) +
+  geom_tile() +
+  scale_fill_gradient2(
+    low = scales::muted("blue"),
+    high = scales::muted("red"),
+    na.value = "white"
+  ) +
+  labs(x = "", y = "", fill = "Pearson's") +
+  coord_fixed() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Results
+
+```{r n-factors, fig.height=20, fig.width=6}
+n_factor_tests <- psych::vss(data, n = 20, plot = FALSE)
+cog_struct <- psych::fa(data, nfactors = 8)
+heatmaply::heatmaply_cor(
+  unclass(cog_struct$loadings)[, c(6, 3, 1, 5, 4, 2, 7, 8)],
+  dendrogram = "row",
+  k_row = NA,
+  label_format_fun = function(...) round(..., digits = 2),
+  margin = c(50, 50, 50, 0)
+)
+```

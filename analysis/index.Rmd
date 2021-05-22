@@ -8,8 +8,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-The analysis mainly contains two parts: 
+The analysis mainly contains two parts:
 
 - [Data cleaning and checking along with test-retest reliability analysis](game_evaluation.html).
-- Exploratory factor analysis to crack the structure of cognition.
+- [Exploratory factor analysis to crack the structure of cognition](explore_structure.html).
 - Prediction of behavior based on the structure of cognition.
