@@ -90,7 +90,7 @@ b4dcbdfe-f835-438b-9448-bc570f384851,BPSD,p_sim_lure,exclude,
 b4dcbdfe-f835-438b-9448-bc570f384851,BPSD,p_sim_target,exclude,
 b4dcbdfe-f835-438b-9448-bc570f384851,BPSD,pc,exclude,
 76621a53-d00c-4efd-83f2-d7d499b7c8b0,DRM,fm_bias,exclude,
-76621a53-d00c-4efd-83f2-d7d499b7c8b0,DRM,fm_dprime,acc,1
+76621a53-d00c-4efd-83f2-d7d499b7c8b0,DRM,fm_dprime,acc,0
 76621a53-d00c-4efd-83f2-d7d499b7c8b0,DRM,tm_bias,exclude,
 76621a53-d00c-4efd-83f2-d7d499b7c8b0,DRM,tm_dprime,acc,0
 d30fe222-c37d-42fb-97d8-e65a039e17d8,DRMB,fm_bias,exclude,
@@ -268,7 +268,7 @@ e4399b39-92a0-4f44-871c-6108a1b17a63,LdnTwr,total_score,exclude,
 71d62d15-c149-4a3a-82f5-fa16d722463f,SSTM,nc,acc,1
 539f4c20-7800-4444-8871-1ef833628a6d,SSTMSpd,max_span,exclude,
 539f4c20-7800-4444-8871-1ef833628a6d,SSTMSpd,mean_span,exclude,
-539f4c20-7800-4444-8871-1ef833628a6d,SSTMSpd,nc,acc,1
+539f4c20-7800-4444-8871-1ef833628a6d,SSTMSpd,nc,exclude,
 c175b435-27ed-4eac-9f98-00b4d2f22838,SCSpan,max_span,exclude,
 c175b435-27ed-4eac-9f98-00b4d2f22838,SCSpan,mean_span,exclude,
 c175b435-27ed-4eac-9f98-00b4d2f22838,SCSpan,nc,acc,1
