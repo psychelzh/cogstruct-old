@@ -4,11 +4,7 @@ author: "Liang Zhang"
 date: "2021-05-21"
 output:
   workflowr::wflow_html:
-    toc: yes
-    toc_float: yes
     code_folding: hide
-    theme: flatly
-    highlight: textmate
 ---
 
 ```{r setup, include=FALSE}
