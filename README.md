@@ -1,5 +1,5 @@
 # cogstruct
 
-A [workflowr][] project.
+A [workflowr](https://github.com/jdblischak/workflowr) project for cognitive structure exploration. 
 
-[workflowr]: https://github.com/jdblischak/workflowr
+Browse the project at [here](https://psychelzh.github.io/cogstruct/).
