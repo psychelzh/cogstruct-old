@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Liang Zhang" />
+
+<meta name="date" content="2021-05-26" />
+
+<title>check_stimuli</title>
+
+<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">cogstruct</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">check_stimuli</h1>
+<h4 class="author">Liang Zhang</h4>
+<h4 class="date">2021-05-26</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-05-26
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>cogstruct/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210521code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210521)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210521code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210521)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcompsychelzhcogstructtree1684c33ce64f4bab3f6b30f9bb7cf6b23f6acfbdtargetblank1684c33a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/psychelzh/cogstruct/tree/1684c33ce64f4bab3f6b30f9bb7cf6b23f6acfbd" target="_blank">1684c33</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcompsychelzhcogstructtree1684c33ce64f4bab3f6b30f9bb7cf6b23f6acfbdtargetblank1684c33a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/psychelzh/cogstruct/tree/1684c33ce64f4bab3f6b30f9bb7cf6b23f6acfbd" target="_blank">1684c33</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    R-toy/
+    Ignored:    _targets/
+    Ignored:    image/age_dev/ADHD.png
+    Ignored:    image/age_dev/AscLanJr.png
+    Ignored:    image/age_dev/AscLanMd.png
+    Ignored:    image/age_dev/AscMem.png
+    Ignored:    image/age_dev/AttSrc.png
+    Ignored:    image/age_dev/BART.png
+    Ignored:    image/age_dev/BDS.png
+    Ignored:    image/age_dev/BPSA.png
+    Ignored:    image/age_dev/BPSB.png
+    Ignored:    image/age_dev/BPSC.png
+    Ignored:    image/age_dev/BPSD.png
+    Ignored:    image/age_dev/Bahav.png
+    Ignored:    image/age_dev/Birds.png
+    Ignored:    image/age_dev/CPT.png
+    Ignored:    image/age_dev/CRT.png
+    Ignored:    image/age_dev/CalcMed.png
+    Ignored:    image/age_dev/CalcSpdJr.png
+    Ignored:    image/age_dev/CardSort.png
+    Ignored:    image/age_dev/ColStrp.png
+    Ignored:    image/age_dev/Conners.png
+    Ignored:    image/age_dev/Consent.png
+    Ignored:    image/age_dev/DG.png
+    Ignored:    image/age_dev/DRIA.png
+    Ignored:    image/age_dev/DRIB.png
+    Ignored:    image/age_dev/DRM.png
+    Ignored:    image/age_dev/DRMB.png
+    Ignored:    image/age_dev/Driving.png
+    Ignored:    image/age_dev/DualTask.png
+    Ignored:    image/age_dev/EFEval.png
+    Ignored:    image/age_dev/EP.png
+    Ignored:    image/age_dev/EPS.png
+    Ignored:    image/age_dev/FDS.png
+    Ignored:    image/age_dev/FOLDA.png
+    Ignored:    image/age_dev/FOLDB.png
+    Ignored:    image/age_dev/FPT.png
+    Ignored:    image/age_dev/FPTS.png
+    Ignored:    image/age_dev/FWS.png
+    Ignored:    image/age_dev/Faces.png
+    Ignored:    image/age_dev/Flkr.png
+    Ignored:    image/age_dev/FlkrSpd.png
+    Ignored:    image/age_dev/HOP.png
+    Ignored:    image/age_dev/Hamster.png
+    Ignored:    image/age_dev/Info.png
+    Ignored:    image/age_dev/JLO.png
+    Ignored:    image/age_dev/LdnTwr.png
+    Ignored:    image/age_dev/Lexic.png
+    Ignored:    image/age_dev/LocMemA.png
+    Ignored:    image/age_dev/LocMemAdv.png
+    Ignored:    image/age_dev/LocMemB.png
+    Ignored:    image/age_dev/MOT.png
+    Ignored:    image/age_dev/MOT2.png
+    Ignored:    image/age_dev/MOTS.png
+    Ignored:    image/age_dev/MR3DA.png
+    Ignored:    image/age_dev/MR3DB.png
+    Ignored:    image/age_dev/MRC.png
+    Ignored:    image/age_dev/MRD.png
+    Ignored:    image/age_dev/MltSns.png
+    Ignored:    image/age_dev/MultiTask.png
+    Ignored:    image/age_dev/NLEMed.png
+    Ignored:    image/age_dev/NVRDA.png
+    Ignored:    image/age_dev/NVRDB.png
+    Ignored:    image/age_dev/NVRIA.png
+    Ignored:    image/age_dev/NVRIB.png
+    Ignored:    image/age_dev/Nback.png
+    Ignored:    image/age_dev/NsymNCmp.png
+    Ignored:    image/age_dev/NumSets.png
+    Ignored:    image/age_dev/OneBackFish.png
+    Ignored:    image/age_dev/Ortho.png
+    Ignored:    image/age_dev/Pinyin.png
+    Ignored:    image/age_dev/RAT.png
+    Ignored:    image/age_dev/RavenAdv.png
+    Ignored:    image/age_dev/RavenSE.png
+    Ignored:    image/age_dev/RavenSO.png
+    Ignored:    image/age_dev/Reading.png
+    Ignored:    image/age_dev/Reading2.png
+    Ignored:    image/age_dev/SCSpan.png
+    Ignored:    image/age_dev/SRT.png
+    Ignored:    image/age_dev/SRTS.png
+    Ignored:    image/age_dev/SSTM.png
+    Ignored:    image/age_dev/SSTMS.png
+    Ignored:    image/age_dev/SSTMSpd.png
+    Ignored:    image/age_dev/SchulteAdv.png
+    Ignored:    image/age_dev/SchulteMed.png
+    Ignored:    image/age_dev/Seman.png
+    Ignored:    image/age_dev/SpatTempA.png
+    Ignored:    image/age_dev/SpatTempB.png
+    Ignored:    image/age_dev/StD.png
+    Ignored:    image/age_dev/StopSig.png
+    Ignored:    image/age_dev/Strength.png
+    Ignored:    image/age_dev/SymNCmp.png
+    Ignored:    image/age_dev/Symbol.png
+    Ignored:    image/age_dev/TOVA.png
+    Ignored:    image/age_dev/TOVAS.png
+    Ignored:    image/age_dev/Tone.png
+    Ignored:    image/age_dev/VRAdv.png
+    Ignored:    image/age_dev/VRJr.png
+    Ignored:    image/age_dev/WxPred.png
+    Ignored:    image/test_retest/ADHD.png
+    Ignored:    image/test_retest/AscLanJr.png
+    Ignored:    image/test_retest/AscLanMd.png
+    Ignored:    image/test_retest/AscMem.png
+    Ignored:    image/test_retest/AttSrc.png
+    Ignored:    image/test_retest/BART.png
+    Ignored:    image/test_retest/BDS.png
+    Ignored:    image/test_retest/BPSA.png
+    Ignored:    image/test_retest/BPSB.png
+    Ignored:    image/test_retest/BPSC.png
+    Ignored:    image/test_retest/BPSD.png
+    Ignored:    image/test_retest/Bahav.png
+    Ignored:    image/test_retest/Birds.png
+    Ignored:    image/test_retest/CPT.png
+    Ignored:    image/test_retest/CRT.png
+    Ignored:    image/test_retest/CalcMed.png
+    Ignored:    image/test_retest/CalcSpdJr.png
+    Ignored:    image/test_retest/CardSort.png
+    Ignored:    image/test_retest/ColStrp.png
+    Ignored:    image/test_retest/Conners.png
+    Ignored:    image/test_retest/Consent.png
+    Ignored:    image/test_retest/DG.png
+    Ignored:    image/test_retest/DRIA.png
+    Ignored:    image/test_retest/DRIB.png
+    Ignored:    image/test_retest/DRM.png
+    Ignored:    image/test_retest/DRMB.png
+    Ignored:    image/test_retest/Driving.png
+    Ignored:    image/test_retest/DualTask.png
+    Ignored:    image/test_retest/EFEval.png
+    Ignored:    image/test_retest/EP.png
+    Ignored:    image/test_retest/EPS.png
+    Ignored:    image/test_retest/FDS.png
+    Ignored:    image/test_retest/FOLDA.png
+    Ignored:    image/test_retest/FOLDB.png
+    Ignored:    image/test_retest/FPT.png
+    Ignored:    image/test_retest/FPTS.png
+    Ignored:    image/test_retest/FWS.png
+    Ignored:    image/test_retest/Faces.png
+    Ignored:    image/test_retest/Flkr.png
+    Ignored:    image/test_retest/FlkrSpd.png
+    Ignored:    image/test_retest/HOP.png
+    Ignored:    image/test_retest/Hamster.png
+    Ignored:    image/test_retest/Info.png
+    Ignored:    image/test_retest/JLO.png
+    Ignored:    image/test_retest/LdnTwr.png
+    Ignored:    image/test_retest/Lexic.png
+    Ignored:    image/test_retest/LocMemA.png
+    Ignored:    image/test_retest/LocMemAdv.png
+    Ignored:    image/test_retest/LocMemB.png
+    Ignored:    image/test_retest/MOT.png
+    Ignored:    image/test_retest/MOT2.png
+    Ignored:    image/test_retest/MOTS.png
+    Ignored:    image/test_retest/MR3DA.png
+    Ignored:    image/test_retest/MR3DB.png
+    Ignored:    image/test_retest/MRC.png
+    Ignored:    image/test_retest/MRD.png
+    Ignored:    image/test_retest/MltSns.png
+    Ignored:    image/test_retest/MultiTask.png
+    Ignored:    image/test_retest/NLEMed.png
+    Ignored:    image/test_retest/NVRDA.png
+    Ignored:    image/test_retest/NVRDB.png
+    Ignored:    image/test_retest/NVRIA.png
+    Ignored:    image/test_retest/NVRIB.png
+    Ignored:    image/test_retest/Nback.png
+    Ignored:    image/test_retest/NsymNCmp.png
+    Ignored:    image/test_retest/NumSets.png
+    Ignored:    image/test_retest/OneBackFish.png
+    Ignored:    image/test_retest/Ortho.png
+    Ignored:    image/test_retest/Pinyin.png
+    Ignored:    image/test_retest/RAT.png
+    Ignored:    image/test_retest/RavenAdv.png
+    Ignored:    image/test_retest/RavenSE.png
+    Ignored:    image/test_retest/RavenSO.png
+    Ignored:    image/test_retest/Reading.png
+    Ignored:    image/test_retest/Reading2.png
+    Ignored:    image/test_retest/SCSpan.png
+    Ignored:    image/test_retest/SRT.png
+    Ignored:    image/test_retest/SRTS.png
+    Ignored:    image/test_retest/SSTM.png
+    Ignored:    image/test_retest/SSTMS.png
+    Ignored:    image/test_retest/SSTMSpd.png
+    Ignored:    image/test_retest/SchulteAdv.png
+    Ignored:    image/test_retest/SchulteMed.png
+    Ignored:    image/test_retest/Seman.png
+    Ignored:    image/test_retest/SpatTempA.png
+    Ignored:    image/test_retest/SpatTempB.png
+    Ignored:    image/test_retest/StD.png
+    Ignored:    image/test_retest/StopSig.png
+    Ignored:    image/test_retest/Strength.png
+    Ignored:    image/test_retest/SymNCmp.png
+    Ignored:    image/test_retest/Symbol.png
+    Ignored:    image/test_retest/TOVA.png
+    Ignored:    image/test_retest/TOVAS.png
+    Ignored:    image/test_retest/Tone.png
+    Ignored:    image/test_retest/VRAdv.png
+    Ignored:    image/test_retest/VRJr.png
+    Ignored:    image/test_retest/WxPred.png
+    Ignored:    renv/library/
+    Ignored:    renv/local/
+    Ignored:    renv/staging/
+    Ignored:    report/game_evaluation.html
+    Ignored:    report/stats_digital.csv
+    Ignored:    report/任务修改批注.xlsx
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/check_stimuli.Rmd</code>) and HTML (<code>docs/check_stimuli.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/psychelzh/cogstruct/blob/1684c33ce64f4bab3f6b30f9bb7cf6b23f6acfbd/analysis/check_stimuli.Rmd" target="_blank">1684c33</a>
+</td>
+<td>
+Liang Zhang
+</td>
+<td>
+2021-05-26
+</td>
+<td>
+separate detail checks
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/psychelzh/cogstruct/blob/ec22af40dcd0d6b8e203b00cef5c9c2bb1db22fd/analysis/check_stimuli.Rmd" target="_blank">ec22af4</a>
+</td>
+<td>
+Liang Zhang
+</td>
+<td>
+2021-05-26
+</td>
+<td>
+merge check stimuli
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/psychelzh/cogstruct/ec22af40dcd0d6b8e203b00cef5c9c2bb1db22fd/docs/check_stimuli.html" target="_blank">ec22af4</a>
+</td>
+<td>
+Liang Zhang
+</td>
+<td>
+2021-05-26
+</td>
+<td>
+merge check stimuli
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/psychelzh/cogstruct/240670005fd0ac623dace7427d63dab798dae062/docs/check_stimuli.html" target="_blank">2406700</a>
+</td>
+<td>
+Liang Zhang
+</td>
+<td>
+2021-05-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/psychelzh/cogstruct/blob/b7a7dbb3ca6488032b643a0966d16d41178310bf/analysis/check_stimuli.Rmd" target="_blank">b7a7dbb</a>
+</td>
+<td>
+Liang Zhang
+</td>
+<td>
+2021-05-26
+</td>
+<td>
+add checking
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="details-checking" class="section level1">
+<h1>Details Checking</h1>
+<pre class="r"><code>restore_data &lt;- function(data) {
+  attr(data, &quot;meta&quot;) |&gt;
+    left_join(data, by = attr(data, &quot;name_key&quot;)) |&gt;
+    select(!any_of(attr(data, &quot;name_key&quot;)))
+}
+plot_age_dev &lt;- function(data) {
+  data %&gt;%
+    group_nest(index) %&gt;%
+    mutate(
+      plot_scatter = map2(
+        data, index,
+        ~ .x %&gt;%
+          ggplot(aes(user_age, score)) +
+          geom_point() +
+          geom_smooth(
+            method = &quot;lm&quot;,
+            formula = y ~ x,
+            color = &quot;orange&quot;
+          ) +
+          stat_cor(
+            cor.coef.name = &quot;r&quot;,
+            r.accuracy = 0.001,
+            p.accuracy = 0.001,
+            show.legend = FALSE,
+            color = &quot;orange&quot;
+          ) +
+          scale_x_continuous(breaks = 1:18) +
+          labs(x = &quot;Age&quot;, y = .y) +
+          theme_pubclean()
+      ),
+      plot_distribution = map2(
+        data, index,
+        ~ .x %&gt;%
+          ggplot(aes(score)) +
+          geom_histogram(
+            aes(y = after_stat(density)), bins = 30,
+            fill = &quot;white&quot;, color = &quot;black&quot;
+          ) +
+          geom_density(color = &quot;lightblue&quot;) +
+          coord_flip() +
+          theme_void()
+      ),
+      plot_lines = map(
+        data,
+        ~ .x %&gt;%
+          group_by(user_age_int, user_sex) %&gt;%
+          summarise(n = n(), mean_se(score), .groups = &quot;drop&quot;) %&gt;%
+          ggplot(aes(
+            user_age_int, y,
+            ymin = ymin, ymax = ymax,
+            color = user_sex
+          )) +
+          geom_point(position = position_dodge(width = 0.1)) +
+          geom_line(position = position_dodge(width = 0.1)) +
+          geom_errorbar(position = position_dodge(width = 0.1), width = 0) +
+          ggrepel::geom_text_repel(aes(label = n), show.legend = FALSE) +
+          scale_x_continuous(breaks = 1:18) +
+          scale_color_viridis_d(labels = c(男 = &quot;Male&quot;, 女 = &quot;Female&quot;)) +
+          labs(x = &quot;Age&quot;, y = &quot;&quot;, color = &quot;Sex&quot;) +
+          theme_pubclean()
+      )
+    ) %&gt;%
+    pmap(combine_plots) %&gt;%
+    wrap_plots(ncol = 1L) +
+    plot_layout(guides = &quot;collect&quot;) &amp;
+    theme(legend.position = &quot;bottom&quot;)
+}
+combine_plots &lt;- function(plot_scatter, plot_distribution, plot_lines, ...) {
+  plot_scatter + plot_distribution + plot_lines +
+    plot_layout(widths = c(5, 1, 5))
+}</code></pre>
+<div id="冲突效应" class="section level2">
+<h2>冲突效应</h2>
+<p>此处需要验证一下刺激序列问题。下图是一致和不一致条件刺激数目差异的分布。可以看出来，候鸟迁徙和多彩文字控制得不够理想。</p>
+<pre class="r"><code>plot_cong_diff &lt;- function(data, name_type, title) {
+  counts &lt;- data %&gt;%
+    group_by(.id, cresp, {{ name_type }}) %&gt;%
+    summarise(n = n(), .groups = &quot;drop&quot;)
+  p1 &lt;- counts %&gt;%
+    pivot_wider(c(.id, cresp), names_from = {{ name_type }}, values_from = n) %&gt;%
+    mutate(diff = Congruent - Incongruent) %&gt;%
+    ggplot(aes(cresp, diff)) +
+    geom_violin() +
+    labs(x = &quot;#Con - #Incong&quot;)
+  p2 &lt;- counts %&gt;%
+    group_by(.id, {{ name_type }}) %&gt;%
+    summarise(n = sum(n), .groups = &quot;drop&quot;) %&gt;%
+    pivot_wider(.id, names_from = {{ name_type }}, values_from = n) %&gt;%
+    mutate(diff = Congruent - Incongruent) %&gt;%
+    ggplot(aes(&quot;#Con - #Incong&quot;, diff)) +
+    geom_violin() +
+    labs(x = &quot;&quot;)
+  p1 + p2 +
+    plot_annotation(title = title) &amp;
+    ggpubr::theme_pubclean(base_family = &quot;SimHei&quot;)
+}
+targets::tar_read(data_parsed_Flkr) %&gt;%
+  plot_cong_diff(type, title = &quot;太空飞船&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/congruency-check-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>targets::tar_read(data_parsed_ColStrp) %&gt;%
+  plot_cong_diff(type, title = &quot;多彩文字&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/congruency-check-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>targets::tar_read(data_parsed_Birds) %&gt;%
+  plot_cong_diff(stimtype, title = &quot;候鸟迁徙&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/congruency-check-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="切换代价" class="section level2">
+<h2>切换代价</h2>
+<p>此处需要验证一下刺激序列问题。下图是单一任务、重复和切换条件的刺激数目的分布，以及重复和切换条件的刺激数目差异的分布。这些图形都表明这三种条件的试次数目相差明显，而且重复条件（Repeat）整体上要少于切换条件（Switch）试次数目。</p>
+<pre class="r"><code>plot_switch_diff &lt;- function(data, name_type, title) {
+  counts &lt;- data %&gt;%
+    filter({{ name_type }} != &quot;Filler&quot;) %&gt;%
+    group_by(.id, cresp, {{ name_type }}) %&gt;%
+    summarise(n = n(), .groups = &quot;drop&quot;)
+  p1 &lt;- ggplot(counts, aes({{ name_type }}, n, color = cresp, fill = cresp)) +
+    geom_point(alpha = 0.1) +
+    geom_violin()
+  p2 &lt;- counts %&gt;%
+    filter({{ name_type }} %in% c(&quot;Repeat&quot;, &quot;Switch&quot;)) %&gt;%
+    pivot_wider(c(.id, cresp), names_from = {{ name_type }}, values_from = n) %&gt;%
+    mutate(diff = Repeat - Switch) %&gt;%
+    ggplot(aes(cresp, diff)) +
+    geom_violin() +
+    labs(x = &quot;#Repeat - #Switch&quot;)
+  p3 &lt;- counts %&gt;%
+    filter({{ name_type }} %in% c(&quot;Repeat&quot;, &quot;Switch&quot;)) %&gt;%
+    group_by(.id, {{ name_type }}) %&gt;%
+    summarise(n = sum(n), .groups = &quot;drop&quot;) %&gt;%
+    pivot_wider(.id, names_from = {{ name_type }}, values_from = n) %&gt;%
+    mutate(diff = Repeat - Switch) %&gt;%
+    ggplot(aes(&quot;#Repeat - #Switch&quot;, diff)) +
+    geom_violin() +
+    labs(x = &quot;&quot;)
+  p1 + p2 + p3 +
+    plot_layout(guides = &quot;collect&quot;) &amp;
+    ggpubr::theme_pubclean(base_family = &quot;SimHei&quot;) &amp;
+    plot_annotation(title = title) &amp;
+    theme(legend.position=&#39;bottom&#39;)
+}
+targets::tar_read(data_parsed_CardSort) %&gt;%
+  plot_switch_diff(type, title = &quot;卡片分类&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/task-switch-check-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>targets::tar_read(data_parsed_Faces) %&gt;%
+  plot_switch_diff(tasktype, title = &quot;察颜观色&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/task-switch-check-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>targets::tar_read(data_parsed_Birds) %&gt;%
+  plot_switch_diff(tasktype, title = &quot;候鸟迁徙&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/task-switch-check-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="九五之集" class="section level2">
+<h2>九五之集</h2>
+<p>本题目的引导流程问题不大，但的确有相当一部分人作答不够认真或不会做（本题目不会做的可能性其实不大）。</p>
+<pre class="r"><code>targets::tar_read(data_parsed_NumSets) %&gt;%
+  group_by(.id) %&gt;%
+  summarise(pc = mean(acc == 1)) %&gt;%
+  ggplot(aes(pc)) +
+  geom_histogram(color = &quot;white&quot;) +
+  ggpubr::theme_pubclean() +
+  labs(x = &quot;Percent of Correct&quot;, y = &quot;Count&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/numsets-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="欢乐餐厅" class="section level2">
+<h2>欢乐餐厅</h2>
+<p>目前验证结果：</p>
+<ul>
+<li><p>难度自适应机制没问题。</p></li>
+<li><p>目前作图结果是因为去掉异常值导致的。作答成绩较好的被试被当作异常值，因为这些被试作答正确个数很容易超过一般人。需要优化一下算分指标，避免这些作答成绩较好的人成为极端值。</p></li>
+</ul>
+<pre class="r"><code>targets::tar_read(indices_AscMem) %&gt;%
+  ggplot(aes(nc)) +
+  geom_boxplot() +
+  scale_y_continuous(breaks = 0, labels = &quot;&quot;) +
+  labs(x = &quot;Count of Correct Responses&quot;) +
+  ggpubr::theme_pubclean(flip = TRUE)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/ascmem-countindex-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>另一些证据表明对于一部分被试而言测验过于困难，或者没有认真完成测验。参考下图，低难度情况下被试在第二次完成时成绩反而有所下降。</li>
+</ul>
+<pre class="r"><code>pc &lt;- targets::tar_read(data_parsed_AscMem) %&gt;%
+  filter(!is.na(correctness)) %&gt;%
+  mutate(
+    pc = dataproc.iquizoo:::parse_char_resp(correctness) %&gt;%
+      map_dbl(~ mean(.x == 1))
+  ) %&gt;%
+  group_by(.id, numcust) %&gt;%
+  summarise(pc = mean(pc), .groups = &quot;drop&quot;) %&gt;%
+  vctrs::vec_restore(targets::tar_read(data_parsed_AscMem))
+attr(pc, &quot;meta&quot;) %&gt;%
+  left_join(targets::tar_read(users), by = &quot;user_id&quot;) %&gt;%
+  group_by(user_id) %&gt;%
+  mutate(occasion = row_number(game_time)) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    user_age = (user_dob %--% game_time) / dyears(),
+    user_age_int = round(user_age)
+  ) %&gt;%
+  group_by(user_age_int) %&gt;%
+  # remove ages with too few samples
+  filter(n() &gt;= 100) %&gt;%
+  ungroup() %&gt;%
+  left_join(pc, by = &quot;.id&quot;) %&gt;%
+  group_by(user_id) %&gt;%
+  filter(max(occasion) &gt; 1, occasion &lt; 3) %&gt;%
+  ungroup() %&gt;%
+  group_by(numcust, occasion) %&gt;%
+  summarise(
+    n = n(),
+    mean_se(pc),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(numcust = factor(numcust)) %&gt;%
+  ggplot(aes(factor(occasion), y, ymax = ymax, ymin = ymin)) +
+  geom_point() +
+  geom_errorbar(width = 0) +
+  geom_line(aes(group = 1)) +
+  ggrepel::geom_text_repel(aes(label = str_c(&quot;N:&quot;, n))) +
+  facet_wrap(~ numcust, nrow = 1) +
+  ggpubr::theme_pubclean() +
+  labs(x = &quot;Time&quot;, y = &quot;Perecent of Correct&quot;, color = &quot;Number of Customers&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/ascmem-pc-length-1.png" width="960" style="display: block; margin: auto;" /></p>
+<ul>
+<li>上图告诉我们，其实完成测验的人里面，<strong><em>90%以上</em></strong>的人都只完成了1-2难度（此题初始时为2）的情况，这就导致表现很好的被试成为离群点。这启发我们可以考虑只采用这三种难度的试次，可以避免很多自适应带来的算分问题。</li>
+</ul>
+</div>
+<div id="宇宙黑洞" class="section level2">
+<h2>宇宙黑洞</h2>
+<p>关于自适应流程的进一步探索。以宇宙黑洞A为例：</p>
+<p>下图是各种长度被试中，至少有2次成绩的情况。其中物体个数2-4的结果表明这些被试相当一部分人作答不认真或完全不会做，且物体个数集中在4-6（此题初始时即为4）。这一情况其实也解释了为什么在重测信度图上显示的第二次比第一次平均成绩稍差。</p>
+<pre class="r"><code>targets::tar_load(data_parsed_LocMemA)
+dists &lt;- data_parsed_LocMemA %&gt;%
+  mutate(
+    mean_dist = dataproc.iquizoo:::parse_char_resp(resplocdist) %&gt;%
+      map_dbl(mean)
+  ) %&gt;%
+  group_by(.id, numobject) %&gt;%
+  summarise(mean_dist = mean(mean_dist, na.rm = TRUE), .groups = &quot;drop&quot;) %&gt;%
+  vctrs::vec_restore(data_parsed_LocMemA)
+dists_cleaned &lt;- attr(dists, &quot;meta&quot;) %&gt;%
+  left_join(targets::tar_read(users), by = &quot;user_id&quot;) %&gt;%
+  group_by(user_id) %&gt;%
+  mutate(occasion = row_number(game_time)) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    user_age = (user_dob %--% game_time) / dyears(),
+    user_age_int = round(user_age)
+  ) %&gt;%
+  group_by(user_age_int) %&gt;%
+  # remove ages with too few samples
+  filter(n() &gt;= 100) %&gt;%
+  ungroup() %&gt;%
+  left_join(dists, by = &quot;.id&quot;) %&gt;%
+  group_by(user_id, numobject, occasion) %&gt;%
+  summarise(mean_dist = mean(mean_dist), .groups = &quot;drop&quot;) %&gt;%
+  group_by(user_id, numobject) %&gt;%
+  filter(n() &gt; 1, occasion &lt; 3) %&gt;%
+  ungroup()
+dists_cleaned %&gt;%
+  group_by(numobject, occasion) %&gt;%
+  summarise(
+    n = n(),
+    mean_se(mean_dist),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(numobject = str_glue(&quot;NumObj:{numobject}\nN:{n}&quot;)) %&gt;%
+  ggplot(aes(factor(occasion), y, ymax = ymax, ymin = ymin)) +
+  geom_point() +
+  geom_errorbar( width = 0) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~ numobject, nrow = 1) +
+  ggpubr::theme_pubclean() +
+  labs(x = &quot;Time&quot;, y = &quot;Mean Distance&quot;, color = &quot;Number of Customers&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/locmem-a-dist-len-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>如果取全部完成了物体个数为4-6且完成过2次测验的被试（计220名），如下图展示的作答成绩则是正常的。</p>
+<pre class="r"><code>dists_cleaned %&gt;%
+  group_by(user_id) %&gt;%
+  filter(all(4:6 %in% numobject)) %&gt;%
+  filter(numobject %in% 4:6) %&gt;%
+  group_by(numobject, occasion) %&gt;%
+  summarise(
+    n = n(),
+    mean_se(mean_dist),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  ggplot(aes(factor(occasion), y, ymax = ymax, ymin = ymin)) +
+  geom_point() +
+  geom_errorbar(width = 0) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~ numobject, nrow = 1) +
+  ggpubr::theme_pubclean() +
+  labs(x = &quot;Time&quot;, y = &quot;Mean Distance&quot;, color = &quot;Number of Customers&quot;)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/locmem-a-dist-length-normal-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>最后我们看一下如果采用加权的正确个数后的情况。此处我们采用经验分布的方式将距离投射到<span class="math inline">\(\left[0,1\right]\)</span>区间，即计算<span class="math inline">\(1-P\left(x\le d\right)\)</span>。不过根据下面的结果可以看出来这一转换得到的结果（<code>nc_weighted</code>）还不如直接计算正确个数（<code>nc_verbatim</code>）好。不过也许去掉不认真完成测验的用户后效果会好一些，只是目前找不到好的方法确定哪些用户不认真。</p>
+<pre class="r"><code>pool_location &lt;- expand_grid(x = 1:6, y = 1:10) %&gt;%
+  filter(!(x %in% 3:4 &amp; y %in% 3:8))
+dists &lt;- combn(nrow(pool_location), 2, simplify = FALSE) %&gt;%
+  map_dbl(
+    ~ dist(rbind(pool_location[.x[[1]], ], pool_location[.x[[2]], ]))[[1]]
+  )
+dist_cdf &lt;- ecdf(dists)
+nc &lt;- data_parsed_LocMemA %&gt;%
+  mutate(
+    dists = dataproc.iquizoo:::parse_char_resp(resplocdist),
+    nc_weighted = map_dbl(dists, ~ sum(1 - dist_cdf(.x))),
+    nc_verbatim = map_dbl(dists, ~ sum(.x == 0))
+  ) %&gt;%
+  group_by(.id) %&gt;%
+  summarise(
+    nc_weighted = sum(nc_weighted),
+    nc_verbatim = sum(nc_verbatim),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  pivot_longer(-.id, names_to = &quot;index&quot;, values_to = &quot;score&quot;) %&gt;%
+  vctrs::vec_restore(data_parsed_LocMemA)
+nc_weighted_clean &lt;- attr(nc, &quot;meta&quot;) %&gt;%
+  left_join(targets::tar_read(users), by = &quot;user_id&quot;) %&gt;%
+  group_by(user_id) %&gt;%
+  mutate(occasion = row_number(game_time)) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    user_age = (user_dob %--% game_time) / dyears(),
+    user_age_int = round(user_age)
+  ) %&gt;%
+  group_by(user_age_int) %&gt;%
+  # remove ages with too few samples
+  filter(n() &gt;= 100) %&gt;%
+  ungroup() %&gt;%
+  left_join(nc, by = &quot;.id&quot;)
+plot_age_dev(nc_weighted_clean)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/locmem-a-nc-weighted-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>nc_weighted_clean %&gt;%
+  group_by(user_id, game_id) %&gt;%
+  filter(max(occasion) &gt; 1, occasion != 3) %&gt;%
+  ungroup() %&gt;%
+  mutate(occasion = factor(occasion, 1:2, c(&quot;test&quot;, &quot;retest&quot;))) %&gt;%
+  group_by(user_id, index) %&gt;%
+  ungroup() %&gt;%
+  pivot_wider(
+    c(user_id, game_id, index),
+    names_from = occasion,
+    values_from = score
+  ) %&gt;%
+  group_nest(index) %&gt;%
+  mutate(
+    icc = map_dbl(
+      data,
+      ~ pluck(psych::ICC(select(.x, test, retest)), &quot;results&quot;, &quot;ICC&quot;, 3)
+    ),
+    .keep = &quot;unused&quot;
+  ) %&gt;%
+  knitr::kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">index</th>
+<th align="right">icc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">nc_verbatim</td>
+<td align="right">0.31</td>
+</tr>
+<tr class="even">
+<td align="left">nc_weighted</td>
+<td align="right">0.27</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="推理测验" class="section level2">
+<h2>推理测验</h2>
+<pre class="r"><code>question_groups &lt;- tarflow.iquizoo::fetch(&quot;sql/question_group.sql&quot;)</code></pre>
+<div id="数字推理" class="section level3">
+<h3>数字推理</h3>
+<p>下图看起来，全部题目回答正确的人数比例大约为5%，没有天花板现象，且全部完成30道题目的人数不低于80%。据此推断30道题目比较合适。</p>
+<pre class="r"><code>data &lt;- bind_rows(
+  A = restore_data(targets::tar_read(data_parsed_DRIA)),
+  B = restore_data(targets::tar_read(data_parsed_DRIB)),
+  .id = &quot;ver&quot;
+)
+data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(nc = sum(acc == 1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, nc)) |&gt;
+  arrange(desc(nc)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of correct&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/digital-reasoning-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(n = sum(acc != -1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, n)) |&gt;
+  arrange(desc(n)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of Items with Response&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/digital-reasoning-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>下面对数字归纳推理的题目做了一下聚类，选题时根据这一分类做了新题。</p>
+<pre class="r"><code>reshape_data &lt;- function(data, prefix) {
+  data %&gt;%
+    filter(acc != -1, rt &gt;= 1000) %&gt;%
+    left_join(question_groups, by = c(&quot;itemid&quot; = &quot;item_id&quot;)) %&gt;%
+    pivot_wider(
+      .id,
+      names_from = &quot;item_order&quot;,
+      values_from = &quot;acc&quot;,
+      names_prefix = prefix
+    ) %&gt;%
+    vctrs::vec_restore(data)
+}
+data_a &lt;- reshape_data(targets::tar_read(data_parsed_DRIA), prefix = &quot;a_&quot;)
+data_b &lt;- reshape_data(targets::tar_read(data_parsed_DRIB), prefix = &quot;b_&quot;)
+data &lt;- left_join(data_a, attr(data_a, &quot;meta&quot;), by = &quot;.id&quot;) %&gt;%
+  left_join(left_join(data_b, attr(data_b, &quot;meta&quot;), by = &quot;.id&quot;), by = &quot;user_id&quot;) %&gt;%
+  select(all_of(setdiff(c(names(data_a), names(data_b)), &quot;.id&quot;)))
+fa_result &lt;- psych::fa(drop_na(data), 5, cor = &quot;mixed&quot;)</code></pre>
+<pre class="r"><code># fa_result$loadings %&gt;% unclass() %&gt;% heatmaply::heatmaply_cor(dendrogram = &quot;row&quot;, k_row = NA)
+clusters &lt;- unclass(fa_result$loadings) %&gt;%
+  dist() %&gt;%
+  hclust() %&gt;%
+  dendextend::find_k() %&gt;%
+  pluck(&quot;pamobject&quot;, &quot;clustering&quot;) %&gt;%
+  enframe(name = &quot;item&quot;, value = &quot;cluster&quot;)
+difficulties &lt;- data %&gt;%
+  summarise(across(.fns = mean, na.rm = TRUE)) %&gt;%
+  pivot_longer(everything(), names_to = &quot;item&quot;, values_to = &quot;difficulty&quot;)
+stats_digital &lt;- clusters %&gt;%
+  left_join(difficulties, by = &quot;item&quot;) %&gt;%
+  separate(item, c(&quot;version&quot;, &quot;order&quot;))
+ggplot(
+  stats_digital,
+  aes(cluster, difficulty, label = order, color = version)
+) +
+  geom_point() +
+  ggrepel::geom_text_repel(show.legend = FALSE)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/select-items-digital-reasoning-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>write_csv(stats_digital, &quot;report/stats_digital.csv&quot;)</code></pre>
+</div>
+<div id="文字推理" class="section level3">
+<h3>文字推理</h3>
+<p>此题目难度有点大，所以很多人并没有完成30道题目，特别是高级版。不过目前我们已经对题目做了一些简化。</p>
+<pre class="r"><code>data &lt;- bind_rows(
+  初级 = restore_data(targets::tar_read(data_parsed_VRJr)),
+  高级 = restore_data(targets::tar_read(data_parsed_VRAdv)),
+  .id = &quot;ver&quot;
+)
+data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(nc = sum(acc == 1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, nc)) |&gt;
+  arrange(desc(nc)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of correct&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/verbal-reasoning-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(n = sum(acc != -1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, n)) |&gt;
+  arrange(desc(n)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of Items with Response&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/verbal-reasoning-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data_jr &lt;- reshape_data(targets::tar_read(data_parsed_VRJr), prefix = &quot;jr_&quot;)
+data_adv &lt;- reshape_data(targets::tar_read(data_parsed_VRAdv), prefix = &quot;adv_&quot;)
+data &lt;- left_join(data_jr, attr(data_jr, &quot;meta&quot;), by = &quot;.id&quot;) %&gt;%
+  left_join(left_join(data_adv, attr(data_adv, &quot;meta&quot;), by = &quot;.id&quot;), by = &quot;user_id&quot;) %&gt;%
+  select(all_of(setdiff(c(names(data_jr), names(data_adv)), &quot;.id&quot;)))
+difficulties &lt;- data %&gt;%
+  summarise(across(.fns = mean, na.rm = TRUE)) %&gt;%
+  pivot_longer(everything(), names_to = &quot;item&quot;, values_to = &quot;difficulty&quot;)</code></pre>
+</div>
+<div id="瑞文推理" class="section level3">
+<h3>瑞文推理</h3>
+<p>高级版计48道题目，目前设定为30分钟，时间很充足（超过90%的人都全部完成）。而标准版奇数和偶数版各15题，目前设定为15分钟，时间很充足（超过90%的人都全部完成）</p>
+<pre class="r"><code>data &lt;- bind_rows(
+  `标准版-偶数` = restore_data(targets::tar_read(data_parsed_RavenSE)),
+  `标准版-奇数` = restore_data(targets::tar_read(data_parsed_RavenSO)),
+  高级 = restore_data(targets::tar_read(data_parsed_RavenAdv)),
+  .id = &quot;ver&quot;
+)
+data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(nc = sum(acc == 1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, nc)) |&gt;
+  arrange(desc(nc)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of correct&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/raven-reasoning-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(n = sum(acc != -1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, n)) |&gt;
+  arrange(desc(n)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of Items with Response&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/raven-reasoning-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="二维心理旋转" class="section level3">
+<h3>二维心理旋转</h3>
+<p>根据下面的图看起来，50个题目数量基本合适（也许可以考虑将数目减少至40个）。</p>
+<pre class="r"><code>data &lt;- bind_rows(
+  C = restore_data(targets::tar_read(data_parsed_MRC)),
+  D = restore_data(targets::tar_read(data_parsed_MRD)),
+  .id = &quot;ver&quot;
+)
+data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(nc = sum(acc == 1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, nc)) |&gt;
+  arrange(desc(nc)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of correct&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/mental-rotation-2d-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(n = sum(acc != -1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, n)) |&gt;
+  arrange(desc(n)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of Items with Response&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/mental-rotation-2d-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="三维心理旋转" class="section level3">
+<h3>三维心理旋转</h3>
+<p>根据下面的图看起来，30个题目数量是合适的。</p>
+<pre class="r"><code>data &lt;- bind_rows(
+  A = restore_data(targets::tar_read(data_parsed_MR3DA)),
+  B = restore_data(targets::tar_read(data_parsed_MR3DB)),
+  .id = &quot;ver&quot;
+)
+data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(nc = sum(acc == 1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, nc)) |&gt;
+  arrange(desc(nc)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of correct&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/mental-rotation-3d-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data |&gt;
+  group_by(ver, user_id, game_time) |&gt;
+  summarise(n = sum(acc != -1), .groups = &quot;drop&quot;) |&gt;
+  group_by(ver) |&gt;
+  group_modify(~ janitor::tabyl(.x, n)) |&gt;
+  arrange(desc(n)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of Items with Response&quot;, y = &quot;Cumulative Percentage&quot;, color = &quot;Version&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/mental-rotation-3d-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="远距离联想测试" class="section level3">
+<h3>远距离联想测试</h3>
+<p>题目数量明显偏多。解决方案是找一些更简单的题目并减少题目数量。</p>
+<pre class="r"><code>data &lt;- restore_data(targets::tar_read(data_parsed_RAT))
+data |&gt;
+  group_by(user_id, game_time) |&gt;
+  summarise(nc = sum(acc == 1), .groups = &quot;drop&quot;) |&gt;
+  janitor::tabyl(nc) |&gt;
+  arrange(desc(nc)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(nc, cum_percent, label = n)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of correct&quot;, y = &quot;Cumulative Percentage&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/RAT-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data |&gt;
+  group_by(user_id, game_time) |&gt;
+  summarise(n = sum(acc != -1), .groups = &quot;drop&quot;) |&gt;
+  janitor::tabyl(n) |&gt;
+  arrange(desc(n)) |&gt;
+  mutate(cum_percent = cumsum(percent)) |&gt;
+  ggplot(aes(n, cum_percent, label = n)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = &quot;Accent&quot;) +
+  labs(x = &quot;Count of Items with Response&quot;, y = &quot;Cumulative Percentage&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/RAT-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="塔罗牌" class="section level2">
+<h2>塔罗牌</h2>
+<p>这个题目主要是检查下目前刺激的概率配置能否被用户预测到。</p>
+<pre class="r"><code>data &lt;- restore_data(targets::tar_read(data_parsed_WxPred))
+data |&gt; 
+  group_by(user_id, game_time) |&gt; 
+  filter(n() == 120, between(probrain, 0.2, 0.8)) |&gt; 
+  group_by(user_id, game_time, probrain) |&gt; 
+  summarise(p_resp_rain = mean(resp == &quot;Rain&quot;), .groups = &quot;drop&quot;) |&gt; 
+  group_by(probrain) |&gt; 
+  summarise(mean_se(p_resp_rain), .groups = &quot;drop&quot;) |&gt; 
+  ggplot(aes(factor(probrain), y, ymax = ymax, ymin = ymin)) +
+  geom_col() +
+  geom_errorbar(width = 0) +
+  labs(x = &quot;P(Rain)&quot;, y = &quot;Proportion of \&quot;Rain\&quot; Response&quot;) +
+  theme_pubclean()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/tarot-whole-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>上图给出了每种下雨概率条件的用户预测“下雨”的比例。可以看出，用户预测“下雨”的比例并不明显随着刺激本身下雨的概率增加而增加。</p>
+<pre class="r"><code>data |&gt; 
+  group_by(user_id, game_time) |&gt; 
+  filter(n() == 120, between(probrain, 0.2, 0.8)) |&gt; 
+  group_by(probrain, trial, outcome) |&gt; 
+  summarise(p_resp_rain = mean(resp == &quot;Rain&quot;), .groups = &quot;drop&quot;) |&gt; 
+  ggplot(aes(factor(trial), p_resp_rain, label = trial)) +
+  geom_point(aes(color = outcome), size = 4) +
+  geom_line(aes(group = 1)) +
+  scale_color_grey() +
+  facet_wrap(~ probrain, labeller = &quot;label_both&quot;, ncol = 2, scales = &quot;free_x&quot;) +
+  labs(x = &quot;Trial&quot;, y = &quot;Percentage of Correct&quot;, color = &quot;Outcome&quot;) +
+  theme_pubclean()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/tarot-dynamic-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>上图给出了每个试次中，对当前刺激做出“下雨”预测的比例。再一次看出来用户似乎没有学会这些模式的下雨概率。目前单个模式出现20次仍然不能学会这个概率，表明这个难度偏大。有两个改版方式：</p>
+<ul>
+<li>直接采用简单的单个图片预测模式，确定6张不同图片分别为6种不同的预测概率<span class="citation">[@frank2004]</span>。</li>
+<li>采用原始的天气预报范式的设置，即单个图片出现与否也有一定预测作用，同时如果注意到整体模式，则预测效果更好<span class="citation">[@knowlton1994]</span>。</li>
+</ul>
+</div>
+<div id="捉虫-高级版" class="section level2">
+<h2>捉虫-高级版</h2>
+<p>这个题目目前有很多反应速度很快的情况。</p>
+<pre class="r"><code>bind_rows(
+  TOVA = restore_data(targets::tar_read(data_parsed_TOVA)),
+  `TOVA-S` = restore_data(targets::tar_read(data_parsed_TOVAS)),
+  CPT = restore_data(targets::tar_read(data_parsed_CPT)),
+  .id = &quot;task_name&quot;
+) |&gt; 
+  filter(rt != 0, type == &quot;Target&quot;) |&gt; 
+  ggplot(aes(rt, task_name, fill = 0.5 - abs(0.5 - after_stat(ecdf)))) +
+  ggridges::stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE, 
+    rel_min_height = 0.001,
+    scale = 1.2
+  ) +
+  scale_fill_viridis_c(guide = FALSE, direction = -1) +
+  scale_x_continuous(expand = c(0.005, 0.005)) +
+  labs(x = &quot;Rection Time (ms)&quot;, y = &quot;Task Name&quot;) +
+  theme_pubclean(flip = TRUE)</code></pre>
+<p><img src="figure/check_stimuli.Rmd/tova-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>不过看这个图，我们会发现捉虫、捉虫-高级版和捉虫-高级简版的反应时基本分布相当，所以反应时记录不是问题。</p>
+</div>
+<div id="数感" class="section level2">
+<h2>数感</h2>
+<p>我们检查一下各个难度的作答结果。</p>
+<pre class="r"><code>restore_data(targets::tar_read(data_parsed_NsymNCmp)) |&gt; 
+  mutate(ratio = bigsetcount / smallsetcount) |&gt; 
+  filter(!is.na(ratio)) |&gt; 
+  group_by(user_id, game_time, ratio) |&gt; 
+  summarise(pc = mean(acc == 1), .groups = &quot;drop&quot;) |&gt; 
+  mutate(ratio_str = as.character(MASS::as.fractions(ratio))) |&gt; 
+  ggplot(aes(reorder(ratio_str, ratio), pc)) +
+  geom_violin() +
+  stat_summary() +
+  stat_summary(geom = &quot;line&quot;, group = 1) +
+  labs(x = &quot;More/Less&quot;, y = &quot;Percentage of Correct&quot;) +
+  theme_pubclean()</code></pre>
+<p><img src="figure/check_stimuli.Rmd/nonsymbolic-comparison-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>可以看出来确实随着难度的减少，即“More/Less”的增加，正确率有所上升。不过这个效果不是很明显。</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<pre class="r"><code>read_csv(&quot;config/check_summary.csv&quot;) |&gt; 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">游戏名称</th>
+<th align="left">英文简称</th>
+<th align="left">修改总结</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">吹气球</td>
+<td align="left">BART</td>
+<td align="left">改为拖动条输入打气次数</td>
+</tr>
+<tr class="even">
+<td align="left">模拟驾驶</td>
+<td align="left">Driving</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">钓鱼高手</td>
+<td align="left">DG</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">变色魔块</td>
+<td align="left">StopSig</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">察颜观色</td>
+<td align="left">Faces</td>
+<td align="left">添加序列</td>
+</tr>
+<tr class="even">
+<td align="left">候鸟迁徙</td>
+<td align="left">Birds</td>
+<td align="left">添加序列</td>
+</tr>
+<tr class="odd">
+<td align="left">多彩文字</td>
+<td align="left">ColStrp</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">太空飞船</td>
+<td align="left">Flkr</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">太空飞船极速版</td>
+<td align="left">FlkrSpd</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">卡片分类</td>
+<td align="left">CardSort</td>
+<td align="left">添加序列</td>
+</tr>
+<tr class="odd">
+<td align="left">图片记忆A</td>
+<td align="left">BPSA</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">图片记忆B</td>
+<td align="left">BPSB</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">图片记忆C</td>
+<td align="left">BPSC</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">图片记忆D</td>
+<td align="left">BPSD</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">言语记忆</td>
+<td align="left">DRM</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">言语记忆B</td>
+<td align="left">DRMB</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">二维心理旋转测试C</td>
+<td align="left">MRC</td>
+<td align="left">改为40题更佳</td>
+</tr>
+<tr class="even">
+<td align="left">二维心理旋转测试D</td>
+<td align="left">MRD</td>
+<td align="left">改为40题更佳</td>
+</tr>
+<tr class="odd">
+<td align="left">三维心理旋转测试A</td>
+<td align="left">MR3DA</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">三维心理旋转测试B</td>
+<td align="left">MR3DB</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">数字归纳推理A</td>
+<td align="left">DRIA</td>
+<td align="left">统一为数字推理A和B</td>
+</tr>
+<tr class="even">
+<td align="left">数字归纳推理B</td>
+<td align="left">DRIB</td>
+<td align="left">统一为数字推理A和B</td>
+</tr>
+<tr class="odd">
+<td align="left">图形归纳推理A</td>
+<td align="left">NVRIA</td>
+<td align="left">统一为图形推理A和B</td>
+</tr>
+<tr class="even">
+<td align="left">图形归纳推理B</td>
+<td align="left">NVRIB</td>
+<td align="left">统一为图形推理A和B</td>
+</tr>
+<tr class="odd">
+<td align="left">图形演绎推理A</td>
+<td align="left">NVRDA</td>
+<td align="left">统一为图形推理A和B</td>
+</tr>
+<tr class="even">
+<td align="left">图形演绎推理B</td>
+<td align="left">NVRDB</td>
+<td align="left">统一为图形推理A和B</td>
+</tr>
+<tr class="odd">
+<td align="left">图形折叠与展开A</td>
+<td align="left">FOLDA</td>
+<td align="left">使用新题目</td>
+</tr>
+<tr class="even">
+<td align="left">图形折叠与展开B</td>
+<td align="left">FOLDB</td>
+<td align="left">使用新题目</td>
+</tr>
+<tr class="odd">
+<td align="left">文字推理-初级</td>
+<td align="left">VRJr</td>
+<td align="left">统一为文字推理A和B</td>
+</tr>
+<tr class="even">
+<td align="left">文字推理-高级</td>
+<td align="left">VRAdv</td>
+<td align="left">统一为文字推理A和B</td>
+</tr>
+<tr class="odd">
+<td align="left">远距离联想测试</td>
+<td align="left">RAT</td>
+<td align="left">减少题目数量和难度</td>
+</tr>
+<tr class="even">
+<td align="left">阅读理解</td>
+<td align="left">Reading2</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">阅读判断</td>
+<td align="left">Reading</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">瑞文标准推理偶数版</td>
+<td align="left">RavenSE</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">瑞文标准推理奇数版</td>
+<td align="left">RavenSO</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">瑞文高级推理</td>
+<td align="left">RavenAdv</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">人工语言-初级</td>
+<td align="left">AscLanJr</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">人工语言-中级</td>
+<td align="left">AscLanMd</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">欢乐餐厅</td>
+<td align="left">AscMem</td>
+<td align="left">自适应导致部分人得分偏高，建议固定长度</td>
+</tr>
+<tr class="even">
+<td align="left">火眼金睛</td>
+<td align="left">AttSrc</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">连点成画</td>
+<td align="left">FPT</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">连点成画极速版</td>
+<td align="left">FPTS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">专注大师</td>
+<td align="left">CalcSpdJr</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">阻挡陨石</td>
+<td align="left">EP</td>
+<td align="left">不适合于测评，可基于此做训练游戏</td>
+</tr>
+<tr class="odd">
+<td align="left">阻挡陨石极速版</td>
+<td align="left">EPS</td>
+<td align="left">不适合于测评，可基于此做训练游戏</td>
+</tr>
+<tr class="even">
+<td align="left">请你找茬</td>
+<td align="left">StD</td>
+<td align="left">优化作答限制，使作答次数等于总差异数目</td>
+</tr>
+<tr class="odd">
+<td align="left">舒尔特方格（高级）</td>
+<td align="left">SchulteAdv</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">舒尔特方格（中级）</td>
+<td align="left">SchulteMed</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">词语判断</td>
+<td align="left">Lexic</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">符号判断</td>
+<td align="left">Symbol</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">拼音判断</td>
+<td align="left">Pinyin</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">声调判断</td>
+<td align="left">Tone</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">语义判断</td>
+<td align="left">Seman</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">字形判断</td>
+<td align="left">Ortho</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">一心多用</td>
+<td align="left">MultiTask</td>
+<td align="left">改变刺激呈现为连续呈现</td>
+</tr>
+<tr class="even">
+<td align="left">一心二用</td>
+<td align="left">DualTask</td>
+<td align="left">改变刺激呈现为连续呈现</td>
+</tr>
+<tr class="odd">
+<td align="left">捉虫</td>
+<td align="left">CPT</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">捉虫高级版</td>
+<td align="left">TOVA</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">捉虫高级简版</td>
+<td align="left">TOVAS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">快打地鼠</td>
+<td align="left">Hamster</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">快速归类</td>
+<td align="left">CRT</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">超级秒表</td>
+<td align="left">SRT</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">超级秒表极速版</td>
+<td align="left">SRTS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">方向临摹</td>
+<td align="left">JLO</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">城市导航</td>
+<td align="left">LocMemAdv</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">宇宙黑洞A</td>
+<td align="left">LocMemA</td>
+<td align="left">由于自适应问题，修改算分为总正确个数</td>
+</tr>
+<tr class="odd">
+<td align="left">宇宙黑洞B</td>
+<td align="left">LocMemB</td>
+<td align="left">由于自适应问题，修改算分为总正确个数</td>
+</tr>
+<tr class="even">
+<td align="left">时空相机A</td>
+<td align="left">SpatTempA</td>
+<td align="left">由于自适应问题，修改算分为总正确个数</td>
+</tr>
+<tr class="odd">
+<td align="left">时空相机B</td>
+<td align="left">SpatTempB</td>
+<td align="left">由于自适应问题，修改算分为总正确个数</td>
+</tr>
+<tr class="even">
+<td align="left">按图索骥</td>
+<td align="left">HOP</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">各得其所</td>
+<td align="left">LdnTwr</td>
+<td align="left">修复已有BUG</td>
+</tr>
+<tr class="even">
+<td align="left">视听反应</td>
+<td align="left">MltSns</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">魔术师B</td>
+<td align="left">Nback</td>
+<td align="left">已修改，目前只保留了2-back和3-back</td>
+</tr>
+<tr class="even">
+<td align="left">河道捕鱼</td>
+<td align="left">OneBackFish</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">倒背数</td>
+<td align="left">BDS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">顺背数</td>
+<td align="left">FDS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">方块速记</td>
+<td align="left">SSTMS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">位置记忆</td>
+<td align="left">SSTM</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">位置记忆极速版</td>
+<td align="left">SSTMSpd</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">蝴蝶照相机</td>
+<td align="left">SCSpan</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">过目不忘</td>
+<td align="left">FWS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">萤火虫</td>
+<td align="left">MOT</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">萤火虫高级版</td>
+<td align="left">MOT2</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">萤火虫极速版</td>
+<td align="left">MOTS</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">速算师（中级）</td>
+<td align="left">CalcMed</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">九五之集</td>
+<td align="left">NumSets</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">登陆月球（中级）</td>
+<td align="left">NLEMed</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">数感</td>
+<td align="left">NsymNCmp</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">数字大小比较</td>
+<td align="left">SymNCmp</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">塔罗牌</td>
+<td align="left">WxPred</td>
+<td align="left">目前的模式用户仍然分不清，建议改为原始设计或者直接使用单个图片对应概率的方式</td>
+</tr>
+<tr class="odd">
+<td align="left">在线认知测评知情同意书</td>
+<td align="left">Consent</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">长处和困难问卷</td>
+<td align="left">Strength</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">Conners行为评定量表</td>
+<td align="left">Conners</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">基本信息</td>
+<td align="left">Info</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="odd">
+<td align="left">执行功能行为评定量表</td>
+<td align="left">EFEval</td>
+<td align="left">暂无</td>
+</tr>
+<tr class="even">
+<td align="left">注意力评定量表</td>
+<td align="left">ADHD</td>
+<td align="left">暂无</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.0 (2021-05-18)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Chinese (Simplified)_China.936 
+[2] LC_CTYPE=Chinese (Simplified)_China.936   
+[3] LC_MONETARY=Chinese (Simplified)_China.936
+[4] LC_NUMERIC=C                              
+[5] LC_TIME=Chinese (Simplified)_China.936    
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+ [1] showtext_0.9-2   showtextdb_3.0   sysfonts_0.8.3   lubridate_1.7.10
+ [5] ggpubr_0.4.0     patchwork_1.1.1  forcats_0.5.1    stringr_1.4.0   
+ [9] dplyr_1.0.6      purrr_0.3.4      readr_1.4.0      tidyr_1.1.3     
+[13] tibble_3.1.2     ggplot2_3.3.3    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+  [1] minqa_1.2.4            colorspace_2.0-1       ggsignif_0.6.1        
+  [4] ggridges_0.5.3         ellipsis_0.3.2         rio_0.5.26            
+  [7] rprojroot_2.0.2        snakecase_0.11.0       fs_1.5.0              
+ [10] rstudioapi_0.13        farver_2.1.0           bit64_4.0.5           
+ [13] ggrepel_0.9.1          fansi_0.4.2            xml2_1.3.2            
+ [16] codetools_0.2-18       splines_4.1.0          mnormt_2.0.2          
+ [19] knitr_1.33             jsonlite_1.7.2         nloptr_1.2.2.2        
+ [22] workflowr_1.6.2        tarflow.iquizoo_0.1.3  Cairo_1.5-12.2        
+ [25] broom_0.7.6            cluster_2.1.2          dbplyr_2.1.1          
+ [28] targets_0.4.2          compiler_4.1.0         httr_1.4.2            
+ [31] backports_1.2.1        assertthat_0.2.1       Matrix_1.3-3          
+ [34] cli_2.5.0              later_1.2.0            htmltools_0.5.1.1     
+ [37] tools_4.1.0            igraph_1.2.6           gtable_0.3.0          
+ [40] glue_1.4.2             Rcpp_1.0.6             carData_3.0-4         
+ [43] cellranger_1.1.0       vctrs_0.3.8            nlme_3.1-152          
+ [46] psych_2.1.3            xfun_0.23              ps_1.6.0              
+ [49] openxlsx_4.2.3         lme4_1.1-27            rvest_1.0.0           
+ [52] lifecycle_1.0.0        renv_0.13.2            dendextend_1.15.1     
+ [55] rstatix_0.7.0          odbc_1.3.2             MASS_7.3-54           
+ [58] scales_1.1.1           dataproc.iquizoo_1.1.0 hms_1.1.0             
+ [61] promises_1.2.0.1       parallel_4.1.0         RColorBrewer_1.1-2    
+ [64] yaml_2.2.1             curl_4.3.1             gridExtra_2.3         
+ [67] stringi_1.6.2          highr_0.9              boot_1.3-28           
+ [70] zip_2.1.1              rlang_0.4.11           pkgconfig_2.0.3       
+ [73] evaluate_0.14          lattice_0.20-44        labeling_0.4.2        
+ [76] bit_4.0.4              processx_3.5.2         tidyselect_1.1.1      
+ [79] here_1.0.1             plyr_1.8.6             magrittr_2.0.1        
+ [82] R6_2.5.0               generics_0.1.0         DBI_1.1.1             
+ [85] pillar_1.6.1           haven_2.4.1            whisker_0.4           
+ [88] foreign_0.8-81         withr_2.4.2            mgcv_1.8-35           
+ [91] abind_1.4-5            janitor_2.1.0          modelr_0.1.8          
+ [94] crayon_1.4.1           car_3.0-10             utf8_1.2.1            
+ [97] tmvnsim_1.0-2          rmarkdown_2.8          viridis_0.6.1         
+[100] grid_4.1.0             readxl_1.3.1           data.table_1.14.0     
+[103] blob_1.2.1             callr_3.7.0            git2r_0.28.0          
+[106] reprex_2.0.0           digest_0.6.27          GPArotation_2014.11-1 
+[109] httpuv_1.6.1           munsell_0.5.0          fst_0.9.4             
+[112] viridisLite_0.4.0     </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
