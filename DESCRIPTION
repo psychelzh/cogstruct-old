@@ -16,18 +16,20 @@ BugReports: https://github.com/psychelzh/cogstruct/issues
 Depends: 
     tidyverse
 Imports: 
+    box,
     config,
     dataproc.iquizoo (>= 0.2.8),
     fst,
     future,
     ggpubr,
-    gt,
     GPArotation,
+    gt,
     here,
     kableExtra,
     patchwork,
     psych,
     qs,
+    showtext,
     tarchetypes,
     tarflow.iquizoo (>= 0.0.1),
     targets,
