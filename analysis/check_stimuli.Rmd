@@ -1,0 +1,878 @@
+---
+title: "check_stimuli"
+author: "Liang Zhang"
+date: "2021-05-26"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(patchwork)
+library(ggpubr)
+library(lubridate)
+library(showtext)
+showtext_auto()
+knitr::opts_knit$set(root.dir = here::here())
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, dev = 'CairoPNG')
+```
+
+# Details Checking
+
+```{r user-defined-functions}
+restore_data <- function(data) {
+  attr(data, "meta") |>
+    left_join(data, by = attr(data, "name_key")) |>
+    select(!any_of(attr(data, "name_key")))
+}
+plot_age_dev <- function(data) {
+  data %>%
+    group_nest(index) %>%
+    mutate(
+      plot_scatter = map2(
+        data, index,
+        ~ .x %>%
+          ggplot(aes(user_age, score)) +
+          geom_point() +
+          geom_smooth(
+            method = "lm",
+            formula = y ~ x,
+            color = "orange"
+          ) +
+          stat_cor(
+            cor.coef.name = "r",
+            r.accuracy = 0.001,
+            p.accuracy = 0.001,
+            show.legend = FALSE,
+            color = "orange"
+          ) +
+          scale_x_continuous(breaks = 1:18) +
+          labs(x = "Age", y = .y) +
+          theme_pubclean()
+      ),
+      plot_distribution = map2(
+        data, index,
+        ~ .x %>%
+          ggplot(aes(score)) +
+          geom_histogram(
+            aes(y = after_stat(density)), bins = 30,
+            fill = "white", color = "black"
+          ) +
+          geom_density(color = "lightblue") +
+          coord_flip() +
+          theme_void()
+      ),
+      plot_lines = map(
+        data,
+        ~ .x %>%
+          group_by(user_age_int, user_sex) %>%
+          summarise(n = n(), mean_se(score), .groups = "drop") %>%
+          ggplot(aes(
+            user_age_int, y,
+            ymin = ymin, ymax = ymax,
+            color = user_sex
+          )) +
+          geom_point(position = position_dodge(width = 0.1)) +
+          geom_line(position = position_dodge(width = 0.1)) +
+          geom_errorbar(position = position_dodge(width = 0.1), width = 0) +
+          ggrepel::geom_text_repel(aes(label = n), show.legend = FALSE) +
+          scale_x_continuous(breaks = 1:18) +
+          scale_color_viridis_d(labels = c(男 = "Male", 女 = "Female")) +
+          labs(x = "Age", y = "", color = "Sex") +
+          theme_pubclean()
+      )
+    ) %>%
+    pmap(combine_plots) %>%
+    wrap_plots(ncol = 1L) +
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom")
+}
+combine_plots <- function(plot_scatter, plot_distribution, plot_lines, ...) {
+  plot_scatter + plot_distribution + plot_lines +
+    plot_layout(widths = c(5, 1, 5))
+}
+```
+
+## 冲突效应
+
+此处需要验证一下刺激序列问题。下图是一致和不一致条件刺激数目差异的分布。可以看出来，候鸟迁徙和多彩文字控制得不够理想。
+
+```{r congruency-check}
+plot_cong_diff <- function(data, name_type, title) {
+  counts <- data %>%
+    group_by(.id, cresp, {{ name_type }}) %>%
+    summarise(n = n(), .groups = "drop")
+  p1 <- counts %>%
+    pivot_wider(c(.id, cresp), names_from = {{ name_type }}, values_from = n) %>%
+    mutate(diff = Congruent - Incongruent) %>%
+    ggplot(aes(cresp, diff)) +
+    geom_violin() +
+    labs(x = "#Con - #Incong")
+  p2 <- counts %>%
+    group_by(.id, {{ name_type }}) %>%
+    summarise(n = sum(n), .groups = "drop") %>%
+    pivot_wider(.id, names_from = {{ name_type }}, values_from = n) %>%
+    mutate(diff = Congruent - Incongruent) %>%
+    ggplot(aes("#Con - #Incong", diff)) +
+    geom_violin() +
+    labs(x = "")
+  p1 + p2 +
+    plot_annotation(title = title) &
+    ggpubr::theme_pubclean(base_family = "SimHei")
+}
+targets::tar_read(data_parsed_Flkr) %>%
+  plot_cong_diff(type, title = "太空飞船")
+targets::tar_read(data_parsed_ColStrp) %>%
+  plot_cong_diff(type, title = "多彩文字")
+targets::tar_read(data_parsed_Birds) %>%
+  plot_cong_diff(stimtype, title = "候鸟迁徙")
+```
+
+## 切换代价
+
+此处需要验证一下刺激序列问题。下图是单一任务、重复和切换条件的刺激数目的分布，以及重复和切换条件的刺激数目差异的分布。这些图形都表明这三种条件的试次数目相差明显，而且重复条件（Repeat）整体上要少于切换条件（Switch）试次数目。
+
+```{r task-switch-check}
+plot_switch_diff <- function(data, name_type, title) {
+  counts <- data %>%
+    filter({{ name_type }} != "Filler") %>%
+    group_by(.id, cresp, {{ name_type }}) %>%
+    summarise(n = n(), .groups = "drop")
+  p1 <- ggplot(counts, aes({{ name_type }}, n, color = cresp, fill = cresp)) +
+    geom_point(alpha = 0.1) +
+    geom_violin()
+  p2 <- counts %>%
+    filter({{ name_type }} %in% c("Repeat", "Switch")) %>%
+    pivot_wider(c(.id, cresp), names_from = {{ name_type }}, values_from = n) %>%
+    mutate(diff = Repeat - Switch) %>%
+    ggplot(aes(cresp, diff)) +
+    geom_violin() +
+    labs(x = "#Repeat - #Switch")
+  p3 <- counts %>%
+    filter({{ name_type }} %in% c("Repeat", "Switch")) %>%
+    group_by(.id, {{ name_type }}) %>%
+    summarise(n = sum(n), .groups = "drop") %>%
+    pivot_wider(.id, names_from = {{ name_type }}, values_from = n) %>%
+    mutate(diff = Repeat - Switch) %>%
+    ggplot(aes("#Repeat - #Switch", diff)) +
+    geom_violin() +
+    labs(x = "")
+  p1 + p2 + p3 +
+    plot_layout(guides = "collect") &
+    ggpubr::theme_pubclean(base_family = "SimHei") &
+    plot_annotation(title = title) &
+    theme(legend.position='bottom')
+}
+targets::tar_read(data_parsed_CardSort) %>%
+  plot_switch_diff(type, title = "卡片分类")
+targets::tar_read(data_parsed_Faces) %>%
+  plot_switch_diff(tasktype, title = "察颜观色")
+targets::tar_read(data_parsed_Birds) %>%
+  plot_switch_diff(tasktype, title = "候鸟迁徙")
+```
+
+## 九五之集
+
+本题目的引导流程问题不大，但的确有相当一部分人作答不够认真或不会做（本题目不会做的可能性其实不大）。
+
+```{r numsets}
+targets::tar_read(data_parsed_NumSets) %>%
+  group_by(.id) %>%
+  summarise(pc = mean(acc == 1)) %>%
+  ggplot(aes(pc)) +
+  geom_histogram(color = "white") +
+  ggpubr::theme_pubclean() +
+  labs(x = "Percent of Correct", y = "Count")
+```
+
+## 欢乐餐厅
+
+目前验证结果：
+
+-   难度自适应机制没问题。
+
+-   目前作图结果是因为去掉异常值导致的。作答成绩较好的被试被当作异常值，因为这些被试作答正确个数很容易超过一般人。需要优化一下算分指标，避免这些作答成绩较好的人成为极端值。
+
+```{r ascmem-countindex}
+targets::tar_read(indices_AscMem) %>%
+  ggplot(aes(nc)) +
+  geom_boxplot() +
+  scale_y_continuous(breaks = 0, labels = "") +
+  labs(x = "Count of Correct Responses") +
+  ggpubr::theme_pubclean(flip = TRUE)
+```
+
+-   另一些证据表明对于一部分被试而言测验过于困难，或者没有认真完成测验。参考下图，低难度情况下被试在第二次完成时成绩反而有所下降。
+
+```{r ascmem-pc-length, fig.width=10, fig.height=5}
+pc <- targets::tar_read(data_parsed_AscMem) %>%
+  filter(!is.na(correctness)) %>%
+  mutate(
+    pc = dataproc.iquizoo:::parse_char_resp(correctness) %>%
+      map_dbl(~ mean(.x == 1))
+  ) %>%
+  group_by(.id, numcust) %>%
+  summarise(pc = mean(pc), .groups = "drop") %>%
+  vctrs::vec_restore(targets::tar_read(data_parsed_AscMem))
+attr(pc, "meta") %>%
+  left_join(targets::tar_read(users), by = "user_id") %>%
+  group_by(user_id) %>%
+  mutate(occasion = row_number(game_time)) %>%
+  ungroup() %>%
+  mutate(
+    user_age = (user_dob %--% game_time) / dyears(),
+    user_age_int = round(user_age)
+  ) %>%
+  group_by(user_age_int) %>%
+  # remove ages with too few samples
+  filter(n() >= 100) %>%
+  ungroup() %>%
+  left_join(pc, by = ".id") %>%
+  group_by(user_id) %>%
+  filter(max(occasion) > 1, occasion < 3) %>%
+  ungroup() %>%
+  group_by(numcust, occasion) %>%
+  summarise(
+    n = n(),
+    mean_se(pc),
+    .groups = "drop"
+  ) %>%
+  mutate(numcust = factor(numcust)) %>%
+  ggplot(aes(factor(occasion), y, ymax = ymax, ymin = ymin)) +
+  geom_point() +
+  geom_errorbar(width = 0) +
+  geom_line(aes(group = 1)) +
+  ggrepel::geom_text_repel(aes(label = str_c("N:", n))) +
+  facet_wrap(~ numcust, nrow = 1) +
+  ggpubr::theme_pubclean() +
+  labs(x = "Time", y = "Perecent of Correct", color = "Number of Customers")
+```
+
+-   上图告诉我们，其实完成测验的人里面，***90%以上***的人都只完成了1-2难度（此题初始时为2）的情况，这就导致表现很好的被试成为离群点。这启发我们可以考虑只采用这三种难度的试次，可以避免很多自适应带来的算分问题。
+
+## 宇宙黑洞
+
+关于自适应流程的进一步探索。以宇宙黑洞A为例：
+
+下图是各种长度被试中，至少有2次成绩的情况。其中物体个数2-4的结果表明这些被试相当一部分人作答不认真或完全不会做，且物体个数集中在4-6（此题初始时即为4）。这一情况其实也解释了为什么在重测信度图上显示的第二次比第一次平均成绩稍差。
+
+```{r locmem-a-dist-len, fig.width=12, fig.height=5}
+targets::tar_load(data_parsed_LocMemA)
+dists <- data_parsed_LocMemA %>%
+  mutate(
+    mean_dist = dataproc.iquizoo:::parse_char_resp(resplocdist) %>%
+      map_dbl(mean)
+  ) %>%
+  group_by(.id, numobject) %>%
+  summarise(mean_dist = mean(mean_dist, na.rm = TRUE), .groups = "drop") %>%
+  vctrs::vec_restore(data_parsed_LocMemA)
+dists_cleaned <- attr(dists, "meta") %>%
+  left_join(targets::tar_read(users), by = "user_id") %>%
+  group_by(user_id) %>%
+  mutate(occasion = row_number(game_time)) %>%
+  ungroup() %>%
+  mutate(
+    user_age = (user_dob %--% game_time) / dyears(),
+    user_age_int = round(user_age)
+  ) %>%
+  group_by(user_age_int) %>%
+  # remove ages with too few samples
+  filter(n() >= 100) %>%
+  ungroup() %>%
+  left_join(dists, by = ".id") %>%
+  group_by(user_id, numobject, occasion) %>%
+  summarise(mean_dist = mean(mean_dist), .groups = "drop") %>%
+  group_by(user_id, numobject) %>%
+  filter(n() > 1, occasion < 3) %>%
+  ungroup()
+dists_cleaned %>%
+  group_by(numobject, occasion) %>%
+  summarise(
+    n = n(),
+    mean_se(mean_dist),
+    .groups = "drop"
+  ) %>%
+  mutate(numobject = str_glue("NumObj:{numobject}\nN:{n}")) %>%
+  ggplot(aes(factor(occasion), y, ymax = ymax, ymin = ymin)) +
+  geom_point() +
+  geom_errorbar( width = 0) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~ numobject, nrow = 1) +
+  ggpubr::theme_pubclean() +
+  labs(x = "Time", y = "Mean Distance", color = "Number of Customers")
+```
+
+如果取全部完成了物体个数为4-6且完成过2次测验的被试（计220名），如下图展示的作答成绩则是正常的。
+
+```{r locmem-a-dist-length-normal}
+dists_cleaned %>%
+  group_by(user_id) %>%
+  filter(all(4:6 %in% numobject)) %>%
+  filter(numobject %in% 4:6) %>%
+  group_by(numobject, occasion) %>%
+  summarise(
+    n = n(),
+    mean_se(mean_dist),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(factor(occasion), y, ymax = ymax, ymin = ymin)) +
+  geom_point() +
+  geom_errorbar(width = 0) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~ numobject, nrow = 1) +
+  ggpubr::theme_pubclean() +
+  labs(x = "Time", y = "Mean Distance", color = "Number of Customers")
+```
+
+最后我们看一下如果采用加权的正确个数后的情况。此处我们采用经验分布的方式将距离投射到$\left[0,1\right]$区间，即计算$1-P\left(x\le d\right)$。不过根据下面的结果可以看出来这一转换得到的结果（`nc_weighted`）还不如直接计算正确个数（`nc_verbatim`）好。不过也许去掉不认真完成测验的用户后效果会好一些，只是目前找不到好的方法确定哪些用户不认真。
+
+```{r locmem-a-nc-weighted, fig.width=10, fig.height=7}
+pool_location <- expand_grid(x = 1:6, y = 1:10) %>%
+  filter(!(x %in% 3:4 & y %in% 3:8))
+dists <- combn(nrow(pool_location), 2, simplify = FALSE) %>%
+  map_dbl(
+    ~ dist(rbind(pool_location[.x[[1]], ], pool_location[.x[[2]], ]))[[1]]
+  )
+dist_cdf <- ecdf(dists)
+nc <- data_parsed_LocMemA %>%
+  mutate(
+    dists = dataproc.iquizoo:::parse_char_resp(resplocdist),
+    nc_weighted = map_dbl(dists, ~ sum(1 - dist_cdf(.x))),
+    nc_verbatim = map_dbl(dists, ~ sum(.x == 0))
+  ) %>%
+  group_by(.id) %>%
+  summarise(
+    nc_weighted = sum(nc_weighted),
+    nc_verbatim = sum(nc_verbatim),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(-.id, names_to = "index", values_to = "score") %>%
+  vctrs::vec_restore(data_parsed_LocMemA)
+nc_weighted_clean <- attr(nc, "meta") %>%
+  left_join(targets::tar_read(users), by = "user_id") %>%
+  group_by(user_id) %>%
+  mutate(occasion = row_number(game_time)) %>%
+  ungroup() %>%
+  mutate(
+    user_age = (user_dob %--% game_time) / dyears(),
+    user_age_int = round(user_age)
+  ) %>%
+  group_by(user_age_int) %>%
+  # remove ages with too few samples
+  filter(n() >= 100) %>%
+  ungroup() %>%
+  left_join(nc, by = ".id")
+plot_age_dev(nc_weighted_clean)
+nc_weighted_clean %>%
+  group_by(user_id, game_id) %>%
+  filter(max(occasion) > 1, occasion != 3) %>%
+  ungroup() %>%
+  mutate(occasion = factor(occasion, 1:2, c("test", "retest"))) %>%
+  group_by(user_id, index) %>%
+  ungroup() %>%
+  pivot_wider(
+    c(user_id, game_id, index),
+    names_from = occasion,
+    values_from = score
+  ) %>%
+  group_nest(index) %>%
+  mutate(
+    icc = map_dbl(
+      data,
+      ~ pluck(psych::ICC(select(.x, test, retest)), "results", "ICC", 3)
+    ),
+    .keep = "unused"
+  ) %>%
+  knitr::kable(digits = 2)
+```
+
+## 推理测验
+
+```{r prepare-reasoning}
+question_groups <- tarflow.iquizoo::fetch("sql/question_group.sql")
+```
+
+### 数字推理
+
+下图看起来，全部题目回答正确的人数比例大约为5%，没有天花板现象，且全部完成30道题目的人数不低于80%。据此推断30道题目比较合适。
+
+```{r digital-reasoning}
+data <- bind_rows(
+  A = restore_data(targets::tar_read(data_parsed_DRIA)),
+  B = restore_data(targets::tar_read(data_parsed_DRIB)),
+  .id = "ver"
+)
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(nc = sum(acc == 1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, nc)) |>
+  arrange(desc(nc)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of correct", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(n = sum(acc != -1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, n)) |>
+  arrange(desc(n)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of Items with Response", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+```
+
+下面对数字归纳推理的题目做了一下聚类，选题时根据这一分类做了新题。
+
+```{r select-items-digital-reasoning}
+reshape_data <- function(data, prefix) {
+  data %>%
+    filter(acc != -1, rt >= 1000) %>%
+    left_join(question_groups, by = c("itemid" = "item_id")) %>%
+    pivot_wider(
+      .id,
+      names_from = "item_order",
+      values_from = "acc",
+      names_prefix = prefix
+    ) %>%
+    vctrs::vec_restore(data)
+}
+data_a <- reshape_data(targets::tar_read(data_parsed_DRIA), prefix = "a_")
+data_b <- reshape_data(targets::tar_read(data_parsed_DRIB), prefix = "b_")
+data <- left_join(data_a, attr(data_a, "meta"), by = ".id") %>%
+  left_join(left_join(data_b, attr(data_b, "meta"), by = ".id"), by = "user_id") %>%
+  select(all_of(setdiff(c(names(data_a), names(data_b)), ".id")))
+fa_result <- psych::fa(drop_na(data), 5, cor = "mixed")
+# fa_result$loadings %>% unclass() %>% heatmaply::heatmaply_cor(dendrogram = "row", k_row = NA)
+clusters <- unclass(fa_result$loadings) %>%
+  dist() %>%
+  hclust() %>%
+  dendextend::find_k() %>%
+  pluck("pamobject", "clustering") %>%
+  enframe(name = "item", value = "cluster")
+difficulties <- data %>%
+  summarise(across(.fns = mean, na.rm = TRUE)) %>%
+  pivot_longer(everything(), names_to = "item", values_to = "difficulty")
+stats_digital <- clusters %>%
+  left_join(difficulties, by = "item") %>%
+  separate(item, c("version", "order"))
+ggplot(
+  stats_digital,
+  aes(cluster, difficulty, label = order, color = version)
+) +
+  geom_point() +
+  ggrepel::geom_text_repel(show.legend = FALSE)
+write_csv(stats_digital, "report/stats_digital.csv")
+```
+
+### 文字推理
+
+此题目难度有点大，所以很多人并没有完成30道题目，特别是高级版。不过目前我们已经对题目做了一些简化。
+
+```{r verbal-reasoning}
+data <- bind_rows(
+  初级 = restore_data(targets::tar_read(data_parsed_VRJr)),
+  高级 = restore_data(targets::tar_read(data_parsed_VRAdv)),
+  .id = "ver"
+)
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(nc = sum(acc == 1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, nc)) |>
+  arrange(desc(nc)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of correct", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(n = sum(acc != -1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, n)) |>
+  arrange(desc(n)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of Items with Response", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+```
+
+```{r verbal-reasoning-difficulty}
+data_jr <- reshape_data(targets::tar_read(data_parsed_VRJr), prefix = "jr_")
+data_adv <- reshape_data(targets::tar_read(data_parsed_VRAdv), prefix = "adv_")
+data <- left_join(data_jr, attr(data_jr, "meta"), by = ".id") %>%
+  left_join(left_join(data_adv, attr(data_adv, "meta"), by = ".id"), by = "user_id") %>%
+  select(all_of(setdiff(c(names(data_jr), names(data_adv)), ".id")))
+difficulties <- data %>%
+  summarise(across(.fns = mean, na.rm = TRUE)) %>%
+  pivot_longer(everything(), names_to = "item", values_to = "difficulty")
+```
+
+### 瑞文推理
+
+高级版计48道题目，目前设定为30分钟，时间很充足（超过90%的人都全部完成）。而标准版奇数和偶数版各15题，目前设定为15分钟，时间很充足（超过90%的人都全部完成）
+
+```{r raven-reasoning}
+data <- bind_rows(
+  `标准版-偶数` = restore_data(targets::tar_read(data_parsed_RavenSE)),
+  `标准版-奇数` = restore_data(targets::tar_read(data_parsed_RavenSO)),
+  高级 = restore_data(targets::tar_read(data_parsed_RavenAdv)),
+  .id = "ver"
+)
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(nc = sum(acc == 1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, nc)) |>
+  arrange(desc(nc)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of correct", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(n = sum(acc != -1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, n)) |>
+  arrange(desc(n)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of Items with Response", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+```
+
+### 二维心理旋转
+
+根据下面的图看起来，50个题目数量基本合适（也许可以考虑将数目减少至40个）。
+
+```{r mental-rotation-2d}
+data <- bind_rows(
+  C = restore_data(targets::tar_read(data_parsed_MRC)),
+  D = restore_data(targets::tar_read(data_parsed_MRD)),
+  .id = "ver"
+)
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(nc = sum(acc == 1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, nc)) |>
+  arrange(desc(nc)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of correct", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(n = sum(acc != -1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, n)) |>
+  arrange(desc(n)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of Items with Response", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+```
+
+### 三维心理旋转
+
+根据下面的图看起来，30个题目数量是合适的。
+
+```{r mental-rotation-3d}
+data <- bind_rows(
+  A = restore_data(targets::tar_read(data_parsed_MR3DA)),
+  B = restore_data(targets::tar_read(data_parsed_MR3DB)),
+  .id = "ver"
+)
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(nc = sum(acc == 1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, nc)) |>
+  arrange(desc(nc)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(nc, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of correct", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+data |>
+  group_by(ver, user_id, game_time) |>
+  summarise(n = sum(acc != -1), .groups = "drop") |>
+  group_by(ver) |>
+  group_modify(~ janitor::tabyl(.x, n)) |>
+  arrange(desc(n)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(n, cum_percent, label = n, color = ver)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 30, by = 5),
+    minor_breaks = 0:30
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of Items with Response", y = "Cumulative Percentage", color = "Version") +
+  theme_bw()
+```
+
+### 远距离联想测试
+
+题目数量明显偏多。解决方案是找一些更简单的题目并减少题目数量。
+
+```{r RAT}
+data <- restore_data(targets::tar_read(data_parsed_RAT))
+data |>
+  group_by(user_id, game_time) |>
+  summarise(nc = sum(acc == 1), .groups = "drop") |>
+  janitor::tabyl(nc) |>
+  arrange(desc(nc)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(nc, cum_percent, label = n)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of correct", y = "Cumulative Percentage") +
+  theme_bw()
+data |>
+  group_by(user_id, game_time) |>
+  summarise(n = sum(acc != -1), .groups = "drop") |>
+  janitor::tabyl(n) |>
+  arrange(desc(n)) |>
+  mutate(cum_percent = cumsum(percent)) |>
+  ggplot(aes(n, cum_percent, label = n)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(0, 50, by = 5),
+    minor_breaks = 0:50
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = seq(0, 1, by = 0.05)
+  ) +
+  ggrepel::geom_text_repel(show.legend = FALSE, max.overlaps = 100) +
+  scale_color_brewer(palette = "Accent") +
+  labs(x = "Count of Items with Response", y = "Cumulative Percentage") +
+  theme_bw()
+```
+
+## 塔罗牌
+
+这个题目主要是检查下目前刺激的概率配置能否被用户预测到。
+
+```{r tarot-whole}
+data <- restore_data(targets::tar_read(data_parsed_WxPred))
+data |> 
+  group_by(user_id, game_time) |> 
+  filter(n() == 120, between(probrain, 0.2, 0.8)) |> 
+  group_by(user_id, game_time, probrain) |> 
+  summarise(p_resp_rain = mean(resp == "Rain"), .groups = "drop") |> 
+  group_by(probrain) |> 
+  summarise(mean_se(p_resp_rain), .groups = "drop") |> 
+  ggplot(aes(factor(probrain), y, ymax = ymax, ymin = ymin)) +
+  geom_col() +
+  geom_errorbar(width = 0) +
+  labs(x = "P(Rain)", y = "Proportion of \"Rain\" Response") +
+  theme_pubclean()
+```
+
+上图给出了每种下雨概率条件的用户预测"下雨"的比例。可以看出，用户预测"下雨"的比例并不明显随着刺激本身下雨的概率增加而增加。
+
+```{r tarot-dynamic, fig.width=12, fig.height=12}
+data |> 
+  group_by(user_id, game_time) |> 
+  filter(n() == 120, between(probrain, 0.2, 0.8)) |> 
+  group_by(probrain, trial, outcome) |> 
+  summarise(p_resp_rain = mean(resp == "Rain"), .groups = "drop") |> 
+  ggplot(aes(factor(trial), p_resp_rain, label = trial)) +
+  geom_point(aes(color = outcome), size = 4) +
+  geom_line(aes(group = 1)) +
+  scale_color_grey() +
+  facet_wrap(~ probrain, labeller = "label_both", ncol = 2, scales = "free_x") +
+  labs(x = "Trial", y = "Percentage of Correct", color = "Outcome") +
+  theme_pubclean()
+```
+
+上图给出了每个试次中，对当前刺激做出"下雨"预测的比例。再一次看出来用户似乎没有学会这些模式的下雨概率。目前单个模式出现20次仍然不能学会这个概率，表明这个难度偏大。有两个改版方式：
+
+-   直接采用简单的单个图片预测模式，确定6张不同图片分别为6种不同的预测概率[@frank2004]。
+-   采用原始的天气预报范式的设置，即单个图片出现与否也有一定预测作用，同时如果注意到整体模式，则预测效果更好[@knowlton1994]。
+
+## 捉虫-高级版
+
+这个题目目前有很多反应速度很快的情况。
+
+```{r tova}
+bind_rows(
+  TOVA = restore_data(targets::tar_read(data_parsed_TOVA)),
+  `TOVA-S` = restore_data(targets::tar_read(data_parsed_TOVAS)),
+  CPT = restore_data(targets::tar_read(data_parsed_CPT)),
+  .id = "task_name"
+) |> 
+  filter(rt != 0, type == "Target") |> 
+  ggplot(aes(rt, task_name, fill = 0.5 - abs(0.5 - after_stat(ecdf)))) +
+  ggridges::stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    rel_min_height = 0.001,
+    scale = 1.2
+  ) +
+  scale_fill_viridis_c(guide = FALSE, direction = -1) +
+  scale_x_continuous(expand = c(0.005, 0.005)) +
+  labs(x = "Rection Time (ms)", y = "Task Name") +
+  theme_pubclean(flip = TRUE)
+```
+
+不过看这个图，我们会发现捉虫、捉虫-高级版和捉虫-高级简版的反应时基本分布相当，所以反应时记录不是问题。
+
+## 数感
+
+我们检查一下各个难度的作答结果。
+
+```{r nonsymbolic-comparison}
+restore_data(targets::tar_read(data_parsed_NsymNCmp)) |> 
+  mutate(ratio = bigsetcount / smallsetcount) |> 
+  filter(!is.na(ratio)) |> 
+  group_by(user_id, game_time, ratio) |> 
+  summarise(pc = mean(acc == 1), .groups = "drop") |> 
+  mutate(ratio_str = as.character(MASS::as.fractions(ratio))) |> 
+  ggplot(aes(reorder(ratio_str, ratio), pc)) +
+  geom_violin() +
+  stat_summary() +
+  stat_summary(geom = "line", group = 1) +
+  labs(x = "More/Less", y = "Percentage of Correct") +
+  theme_pubclean()
+```
+
+可以看出来确实随着难度的减少，即"More/Less"的增加，正确率有所上升。不过这个效果不是很明显。
+
+# Conclusion
+
+```{r conclusion}
+read_csv("config/check_summary.csv") |> 
+  knitr::kable()
+```
+
+# References
