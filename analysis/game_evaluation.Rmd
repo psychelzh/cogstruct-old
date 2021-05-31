@@ -14,8 +14,6 @@ library(gt)
 library(patchwork)
 library(ggpubr)
 library(lubridate)
-library(showtext)
-showtext_auto()
 knitr::opts_knit$set(root.dir = here::here())
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, dev = 'CairoPNG')
 ```
@@ -32,8 +30,8 @@ targets::tar_load(rmd_child_check_index)
 knit_text <- \(text, ...) knitr::knit(text = text, ...)
 for (row in seq_len(nrow(games_included))) {
   cur_game_info <- slice(games_included, row)
-  knitr::knit_expand(rmd_child_check_index) |> 
-    knit_text(quiet = TRUE) |> 
+  knitr::knit_expand(rmd_child_check_index) |>
+    knit_text(quiet = TRUE) |>
     cat()
   cat("\n\n")
 }
