@@ -14,10 +14,8 @@ library(tidyverse)
 library(patchwork)
 library(ggpubr)
 library(lubridate)
-library(showtext)
-showtext_auto()
 knitr::opts_knit$set(root.dir = here::here())
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, dev = 'CairoPNG')
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 # Details Checking
