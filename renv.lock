@@ -57,10 +57,10 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.3-3",
+      "Version": "1.3-4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "df57c82e79600601287edfdcef92c2d6"
+      "Hash": "4ed05e9c9726267e4a5872e09c04587c"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -181,16 +181,10 @@
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
-      "Version": "0.10.4.0.0",
-      "Source": "CRAN",
+      "Version": "0.10.5.0.0",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "RcppArmadillo",
-      "RemoteRef": "RcppArmadillo",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.10.4.0.0",
-      "Hash": "a8df2d4278c6501b2c209f4acc6a3036"
+      "Hash": "b1c9574190c1c84417eedaa5901138bf"
     },
     "RcppEigen": {
       "Package": "RcppEigen",
@@ -230,6 +224,13 @@
       "RemotePkgType": "source",
       "RemoteSha": "1.81",
       "Hash": "2042cd9759cc89a453c4aefef0ce9aae"
+    },
+    "UpSetR": {
+      "Package": "UpSetR",
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f6ef89503aaff474873f8bc1823894e1"
     },
     "abind": {
       "Package": "abind",
@@ -357,16 +358,10 @@
     },
     "broom": {
       "Package": "broom",
-      "Version": "0.7.6",
-      "Source": "CRAN",
+      "Version": "0.7.7",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "broom",
-      "RemoteRef": "broom",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.7.6",
-      "Hash": "06015476250468fc013c30022118ce3a"
+      "Hash": "2368dde18d8ef1ca933e7e2eea3ece57"
     },
     "cachem": {
       "Package": "cachem",
@@ -533,16 +528,10 @@
     },
     "corrplot": {
       "Package": "corrplot",
-      "Version": "0.88",
-      "Source": "CRAN",
+      "Version": "0.89",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "corrplot",
-      "RemoteRef": "corrplot",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.88",
-      "Hash": "73276adb48c37144836420004f59d546"
+      "Hash": "98960b099023f7d04dd5a46bd4ff5d45"
     },
     "cowplot": {
       "Package": "cowplot",
@@ -676,16 +665,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.0.6",
-      "Source": "CRAN",
+      "Version": "1.0.7",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "dplyr",
-      "RemoteRef": "dplyr",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "1.0.6",
-      "Hash": "19e84500b64bc7e589cb1e2550e25832"
+      "Hash": "36f1ae62f026c8ba9f9b5c9a08c03297"
     },
     "dtplyr": {
       "Package": "dtplyr",
@@ -728,16 +711,10 @@
     },
     "fansi": {
       "Package": "fansi",
-      "Version": "0.4.2",
-      "Source": "CRAN",
+      "Version": "0.5.0",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "fansi",
-      "RemoteRef": "fansi",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.4.2",
-      "Hash": "fea074fb67fe4c25d47ad09087da847d"
+      "Hash": "d447b40982c576a72b779f0a3b3da227"
     },
     "farver": {
       "Package": "farver",
@@ -865,16 +842,10 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.3.3",
-      "Source": "CRAN",
+      "Version": "3.3.4",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "ggplot2",
-      "RemoteRef": "ggplot2",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "3.3.3",
-      "Hash": "3eb6477d01eb5bbdc03f7d5f70f2733e"
+      "Hash": "53ed0e82132d7f6ade8428f494d175e1"
     },
     "ggpubr": {
       "Package": "ggpubr",
@@ -917,16 +888,10 @@
     },
     "ggsignif": {
       "Package": "ggsignif",
-      "Version": "0.6.1",
-      "Source": "CRAN",
+      "Version": "0.6.2",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "ggsignif",
-      "RemoteRef": "ggsignif",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.6.1",
-      "Hash": "6770aac2203800889cccd6aee7f206a7"
+      "Hash": "b1c9776ac546b9f3c51c9b21ba8f6869"
     },
     "gh": {
       "Package": "gh",
@@ -1340,16 +1305,10 @@
     },
     "matrixStats": {
       "Package": "matrixStats",
-      "Version": "0.58.0",
-      "Source": "CRAN",
+      "Version": "0.59.0",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "matrixStats",
-      "RemoteRef": "matrixStats",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.58.0",
-      "Hash": "c318d148056e5bb8d7de79b0876f9ae6"
+      "Hash": "45a2fee40a2f1bcad392cbe8a5f10d4f"
     },
     "memoise": {
       "Package": "memoise",
@@ -1366,10 +1325,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-35",
+      "Version": "1.8-36",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "89fd8b2ad4a6cb4979b78cf2a77ab503"
+      "Hash": "93cc747b0e1ad882a4570463c3575c23"
     },
     "mime": {
       "Package": "mime",
@@ -1436,6 +1395,13 @@
       "RemoteSha": "0.5.0",
       "Hash": "6dfe8bf774944bd5595785e3229d8771"
     },
+    "naniar": {
+      "Package": "naniar",
+      "Version": "0.6.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4fffc0d02071a6150c1016fb8766224c"
+    },
     "nlme": {
       "Package": "nlme",
       "Version": "3.1-152",
@@ -1462,6 +1428,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "3a3dc184000bc9e6c145c4dbde4dd702"
+    },
+    "norm": {
+      "Package": "norm",
+      "Version": "1.0-9.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "302631c84303c4910692fdc66273744e"
     },
     "numDeriv": {
       "Package": "numDeriv",
@@ -1504,29 +1477,17 @@
     },
     "openxlsx": {
       "Package": "openxlsx",
-      "Version": "4.2.3",
-      "Source": "CRAN",
+      "Version": "4.2.4",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "openxlsx",
-      "RemoteRef": "openxlsx",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "4.2.3",
-      "Hash": "2253a430965e222d11a2f9277cd34c2e"
+      "Hash": "f1b1ca1254ccb485dccc9c0dc65a2c36"
     },
     "parallelly": {
       "Package": "parallelly",
-      "Version": "1.25.0",
-      "Source": "CRAN",
+      "Version": "1.26.0",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "parallelly",
-      "RemoteRef": "parallelly",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "1.25.0",
-      "Hash": "bc53006c11a08ba955ccbf85b586875f"
+      "Hash": "08925887608f7086dd7522933ff43a93"
     },
     "patchwork": {
       "Package": "patchwork",
@@ -1579,6 +1540,13 @@
       "RemotePkgType": "source",
       "RemoteSha": "2.0.3",
       "Hash": "01f28d4278f15c76cddbea05899c5d6f"
+    },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f"
     },
     "polynom": {
       "Package": "polynom",
@@ -1660,16 +1628,10 @@
     },
     "psych": {
       "Package": "psych",
-      "Version": "2.1.3",
-      "Source": "CRAN",
+      "Version": "2.1.6",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "psych",
-      "RemoteRef": "psych",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "2.1.3",
-      "Hash": "5374aa4dca6ed9a49b5879064463b049"
+      "Hash": "d37247c8be48e9ff773e6634aa3cc17b"
     },
     "purrr": {
       "Package": "purrr",
@@ -1699,16 +1661,10 @@
     },
     "quantreg": {
       "Package": "quantreg",
-      "Version": "5.85",
-      "Source": "CRAN",
+      "Version": "5.86",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "quantreg",
-      "RemoteRef": "quantreg",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN",
-      "RemotePkgType": "source",
-      "RemoteSha": "5.85",
-      "Hash": "d41a5849071941c6c269b57324515398"
+      "Hash": "28692dfa3efea8e19d29347d05f5a489"
     },
     "rappdirs": {
       "Package": "rappdirs",
@@ -1829,16 +1785,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.8",
-      "Source": "CRAN",
+      "Version": "2.9",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "rmarkdown",
-      "RemoteRef": "rmarkdown",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "2.8",
-      "Hash": "f518ba47713f92d0d603eec7c6888faf"
+      "Hash": "912c09266d5470516df4df7a303cde92"
     },
     "rprojroot": {
       "Package": "rprojroot",
@@ -2129,16 +2079,10 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.31",
-      "Source": "CRAN",
+      "Version": "0.32",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "tinytex",
-      "RemoteRef": "tinytex",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.31",
-      "Hash": "25b572f764f3c19fef9aac33b5724f3d"
+      "Hash": "db9a6f2cf147751322d22c9f6647c7bd"
     },
     "tmvnsim": {
       "Package": "tmvnsim",
@@ -2205,6 +2149,13 @@
       "RemoteSha": "0.3.8",
       "Hash": "ecf749a1b39ea72bd9b51b76292261f1"
     },
+    "viridis": {
+      "Package": "viridis",
+      "Version": "0.6.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "424d1285b7372d39806abb19467e4df4"
+    },
     "viridisLite": {
       "Package": "viridisLite",
       "Version": "0.4.0",
@@ -2230,6 +2181,13 @@
       "RemotePkgType": "source",
       "RemoteSha": "2.0.9",
       "Hash": "12545f2acf49d1d346d075580122d89c"
+    },
+    "visdat": {
+      "Package": "visdat",
+      "Version": "0.5.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f62b960320b18fdffb2f0f76bb65dbaf"
     },
     "webshot": {
       "Package": "webshot",
@@ -2272,16 +2230,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.23",
-      "Source": "CRAN",
+      "Version": "0.24",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "xfun",
-      "RemoteRef": "xfun",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "0.23",
-      "Hash": "791a57f43c887111490851dcd166d344"
+      "Hash": "88cdb9779a657ad80ad942245fffba31"
     },
     "xml2": {
       "Package": "xml2",
@@ -2311,16 +2263,10 @@
     },
     "zip": {
       "Package": "zip",
-      "Version": "2.1.1",
-      "Source": "CRAN",
+      "Version": "2.2.0",
+      "Source": "Repository",
       "Repository": "CRAN",
-      "RemoteType": "standard",
-      "RemotePkgRef": "zip",
-      "RemoteRef": "zip",
-      "RemoteRepos": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-      "RemotePkgType": "source",
-      "RemoteSha": "2.1.1",
-      "Hash": "3bc8405c637d988801ec5ea88372d0c2"
+      "Hash": "c7eef2996ac270a18c2715c997a727c5"
     }
   }
 }

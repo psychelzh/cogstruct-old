@@ -25,6 +25,7 @@ Imports:
     GPArotation,
     gt,
     here,
+    naniar,
     kableExtra,
     patchwork,
     psych,
