@@ -2,7 +2,7 @@
 title: "check_stimuli"
 author: "Liang Zhang"
 date: "2021-05-26"
-output: 
+output:
   workflowr::wflow_html:
     code_folding: hide
 editor_options:
@@ -734,6 +734,11 @@ data |>
 
 ```{r RAT}
 data <- restore_data(targets::tar_read(data_parsed_RAT))
+difficulties <- data %>%
+  left_join(question_groups, by = c("game_id", "itemid" = "item_id")) |>
+  filter(acc != -1) |>
+  group_by(item_order) |>
+  summarise(difficulty = mean(acc == 1), .groups = "drop")
 data |>
   group_by(user_id, game_time) |>
   summarise(nc = sum(acc == 1), .groups = "drop") |>
@@ -784,13 +789,13 @@ data |>
 
 ```{r tarot-whole}
 data <- restore_data(targets::tar_read(data_parsed_WxPred))
-data |> 
-  group_by(user_id, game_time) |> 
-  filter(n() == 120, between(probrain, 0.2, 0.8)) |> 
-  group_by(user_id, game_time, probrain) |> 
-  summarise(p_resp_rain = mean(resp == "Rain"), .groups = "drop") |> 
-  group_by(probrain) |> 
-  summarise(mean_se(p_resp_rain), .groups = "drop") |> 
+data |>
+  group_by(user_id, game_time) |>
+  filter(n() == 120, between(probrain, 0.2, 0.8)) |>
+  group_by(user_id, game_time, probrain) |>
+  summarise(p_resp_rain = mean(resp == "Rain"), .groups = "drop") |>
+  group_by(probrain) |>
+  summarise(mean_se(p_resp_rain), .groups = "drop") |>
   ggplot(aes(factor(probrain), y, ymax = ymax, ymin = ymin)) +
   geom_col() +
   geom_errorbar(width = 0) +
@@ -801,11 +806,11 @@ data |>
 上图给出了每种下雨概率条件的用户预测"下雨"的比例。可以看出，用户预测"下雨"的比例并不明显随着刺激本身下雨的概率增加而增加。
 
 ```{r tarot-dynamic, fig.width=12, fig.height=12}
-data |> 
-  group_by(user_id, game_time) |> 
-  filter(n() == 120, between(probrain, 0.2, 0.8)) |> 
-  group_by(probrain, trial, outcome) |> 
-  summarise(p_resp_rain = mean(resp == "Rain"), .groups = "drop") |> 
+data |>
+  group_by(user_id, game_time) |>
+  filter(n() == 120, between(probrain, 0.2, 0.8)) |>
+  group_by(probrain, trial, outcome) |>
+  summarise(p_resp_rain = mean(resp == "Rain"), .groups = "drop") |>
   ggplot(aes(factor(trial), p_resp_rain, label = trial)) +
   geom_point(aes(color = outcome), size = 4) +
   geom_line(aes(group = 1)) +
@@ -830,12 +835,12 @@ bind_rows(
   `TOVA-S` = restore_data(targets::tar_read(data_parsed_TOVAS)),
   CPT = restore_data(targets::tar_read(data_parsed_CPT)),
   .id = "task_name"
-) |> 
-  filter(rt != 0, type == "Target") |> 
+) |>
+  filter(rt != 0, type == "Target") |>
   ggplot(aes(rt, task_name, fill = 0.5 - abs(0.5 - after_stat(ecdf)))) +
   ggridges::stat_density_ridges(
     geom = "density_ridges_gradient",
-    calc_ecdf = TRUE, 
+    calc_ecdf = TRUE,
     rel_min_height = 0.001,
     scale = 1.2
   ) +
@@ -852,12 +857,12 @@ bind_rows(
 我们检查一下各个难度的作答结果。
 
 ```{r nonsymbolic-comparison}
-restore_data(targets::tar_read(data_parsed_NsymNCmp)) |> 
-  mutate(ratio = bigsetcount / smallsetcount) |> 
-  filter(!is.na(ratio)) |> 
-  group_by(user_id, game_time, ratio) |> 
-  summarise(pc = mean(acc == 1), .groups = "drop") |> 
-  mutate(ratio_str = as.character(MASS::as.fractions(ratio))) |> 
+restore_data(targets::tar_read(data_parsed_NsymNCmp)) |>
+  mutate(ratio = bigsetcount / smallsetcount) |>
+  filter(!is.na(ratio)) |>
+  group_by(user_id, game_time, ratio) |>
+  summarise(pc = mean(acc == 1), .groups = "drop") |>
+  mutate(ratio_str = as.character(MASS::as.fractions(ratio))) |>
   ggplot(aes(reorder(ratio_str, ratio), pc)) +
   geom_violin() +
   stat_summary() +
@@ -871,7 +876,7 @@ restore_data(targets::tar_read(data_parsed_NsymNCmp)) |>
 # Conclusion
 
 ```{r conclusion}
-read_csv("config/check_summary.csv") |> 
+read_csv("config/check_summary.csv") |>
   knitr::kable()
 ```
 

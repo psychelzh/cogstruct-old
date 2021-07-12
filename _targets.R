@@ -2,11 +2,7 @@ library(targets)
 library(tarchetypes)
 purrr::walk(fs::dir_ls("R"), source)
 future::plan(future::multisession)
-search_games_mem <- memoise::memoise(
-  tarflow.iquizoo::search_games,
-  cache = cachem::cache_disk("~/.cache.tarflow.iquizoo")
-)
-games <- search_games_mem(config::get("where"))
+games <- tarflow.iquizoo::search_games_mem(config::get("where"))
 tar_option_set(
   package = c("tidyverse", "dataproc.iquizoo", "lubridate", "ggpubr", "patchwork"),
   imports = "dataproc.iquizoo"
