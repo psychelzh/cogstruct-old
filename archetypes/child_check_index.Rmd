@@ -75,7 +75,7 @@ knitr::include_graphics(fig_disp, error = FALSE)
 
 ### Test-Retest Reliability (Strict Rule)
 
-```{r test-retest-table-{{cur_game_info$game_name_abbr}}}
+```{r test-retest-table-{{cur_game_info$game_name_abbr}}-strict}
 targets::tar_read_raw(
   str_glue("test_retest_stats_strict_{cur_game_info$game_name_abbr}")
 ) %>%
@@ -95,7 +95,7 @@ targets::tar_read_raw(
   tab_options(column_labels.font.weight = "bold")
 ```
 
-```{r test-retest-fig-{{cur_game_info$game_name_abbr}}}
+```{r test-retest-fig-{{cur_game_info$game_name_abbr}}-strict}
 fig_disp <- targets::tar_read_raw(str_glue("file_test_retest_plot_strict_{cur_game_info$game_name_abbr}"))
 if (rmarkdown::all_output_formats(knitr::current_input(dir = TRUE)) == "workflowr::wflow_html") {
   fig_disp_real <- here::here("docs", fig_disp)
