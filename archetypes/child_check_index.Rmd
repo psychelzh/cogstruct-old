@@ -72,3 +72,37 @@ if (rmarkdown::all_output_formats(knitr::current_input(dir = TRUE)) == "workflow
 }
 knitr::include_graphics(fig_disp, error = FALSE)
 ```
+
+### Test-Retest Reliability (Strict Rule)
+
+```{r test-retest-table-{{cur_game_info$game_name_abbr}}}
+targets::tar_read_raw(
+  str_glue("test_retest_stats_strict_{cur_game_info$game_name_abbr}")
+) %>%
+  select(-game_id) %>%
+  rename_with(
+    ~ .x %>%
+      str_replace("([^_]+)_(.+)", "\\2.\\1") %>%
+      str_replace("_", " ") %>%
+      str_to_title(),
+    -index
+  ) %>%
+  gt(rowname_col = "index") %>%
+  tab_stubhead(label = "Index Name") %>%
+  tab_spanner_delim(delim = ".") %>%
+  fmt_number(contains("icc")) %>%
+  fmt_missing(everything()) %>%
+  tab_options(column_labels.font.weight = "bold")
+```
+
+```{r test-retest-fig-{{cur_game_info$game_name_abbr}}}
+fig_disp <- targets::tar_read_raw(str_glue("file_test_retest_plot_strict_{cur_game_info$game_name_abbr}"))
+if (rmarkdown::all_output_formats(knitr::current_input(dir = TRUE)) == "workflowr::wflow_html") {
+  fig_disp_real <- here::here("docs", fig_disp)
+  if (!fs::file_exists(fig_disp_real)) {
+    fs::dir_create(fs::path_dir(fig_disp_real))
+    fs::file_copy(here::here(fig_disp), here::here("docs", fig_disp))
+  }
+}
+knitr::include_graphics(fig_disp, error = FALSE)
+```

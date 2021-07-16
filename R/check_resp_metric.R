@@ -19,7 +19,8 @@ check_resp_metric <- function(data, config) {
           nc_okay = TRUE,
           rr_okay = TRUE,
           .groups = "drop"
-        )
+        ) |>
+        vctrs::vec_restore(data)
     )
   }
   if (!is.na(config$filter)) {

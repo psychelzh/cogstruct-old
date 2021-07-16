@@ -52,6 +52,16 @@ targets_data <- tar_map(
   tar_file(
     file_age_dev_plot,
     plot_age_dev(indices_clean, game_name_abbr)
+  ),
+  tar_target(resp_check_out, simplify_resp_check(resp_check)),
+  tar_target(
+    test_retest_data_strict,
+    prep_test_retest_strict(indices_clean, count_invalid_resp, max_invalid)
+  ),
+  tar_target(test_retest_stats_strict, calc_test_retest(test_retest_data_strict)),
+  tar_file(
+    file_test_retest_plot_strict,
+    plot_test_retest(test_retest_data_strict, game_name_abbr, suffix = "_strict")
   )
 )
 list(
@@ -71,6 +81,11 @@ list(
   tar_combine(file_test_retest_plot, targets_data[[9]], format = "file"),
   tar_combine(age_dev_stats, targets_data[[10]]),
   tar_combine(file_age_dev_plot, targets_data[[11]], format = "file"),
+  tar_combine(resp_check, targets_data[[12]]),
+  tar_target(max_invalid, 5),
+  tar_target(count_invalid_resp, count_invalid(resp_check)),
+  tar_combine(test_retest_stats_strict, targets_data[[14]]),
+  tar_combine(file_test_retest_plot_strict, targets_data[[15]], format = "file"),
   tar_target(test_retest_sp_data, prep_test_retest_sp(indices_clean)),
   tar_target(test_retest_stats_sp, calc_test_retest(test_retest_sp_data)),
   tar_target(

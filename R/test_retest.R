@@ -112,11 +112,12 @@ calc_icc <- function(data, name_suffix = "") {
 #' @title
 #' @param test_retest_data
 #' @param game_name_abbr
+#' @param suffix The suffix for the output file name.
 #' @return
 #' @author Liang Zhang
 #' @export
-plot_test_retest <- function(test_retest_data, game_name_abbr) {
-  filename <- fs::path("image", "test_retest", str_c(game_name_abbr, ".png"))
+plot_test_retest <- function(test_retest_data, game_name_abbr, suffix = "") {
+  filename <- fs::path("image", "test_retest", str_c(game_name_abbr, suffix, ".png"))
   data <- filter(test_retest_data, !is_outlier)
   if (nrow(data) <= 1) {
     ggsave(
@@ -191,3 +192,21 @@ plot_test_retest <- function(test_retest_data, game_name_abbr) {
   )
   filename
 }
+
+#' Prapare test-retest data with stricter rules
+#'
+#' @title
+#' @param indices_clean
+#' @param count_invalid_resp
+#' @param max_invalid
+#' @return
+#' @author Liang Zhang
+#' @export
+prep_test_retest_strict <- function(indices_clean, count_invalid_resp,
+                                    max_invalid) {
+  count_invalid_resp |>
+    filter(n_invalid <= max_invalid) |>
+    inner_join(indices_clean, by = c("user_id", "occasion")) |>
+    prep_test_retest()
+}
+
