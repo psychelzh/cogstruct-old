@@ -22,6 +22,27 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, dev = 'CairoPNG')
 games_included <- targets::tar_read(games_included) %>%
   arrange(prep_fun_name, game_name)
 targets::tar_load(rmd_child_check_index)
+targets::tar_load(test_retest_stats)
+targets::tar_load(test_retest_stats_strict)
+```
+
+# Overall Reliability
+
+```{r tab-reliability}
+full_join(
+  test_retest_stats |> 
+    select(game_id, index, Whole_N = n_no_invalid, Whole_ICC = icc_no_invalid),
+  test_retest_stats_strict |> 
+    select(game_id, index, Strict_N = n_no_invalid, Strict_ICC = icc_no_invalid),
+  by = c("game_id", "index")
+) |> 
+  left_join(games_included, by = "game_id") |> 
+  select(game_name, index, Whole_N, Whole_ICC, Strict_N, Strict_ICC) |> 
+  gt(rowname_col = "index", groupname_col = "game_name") |> 
+  tab_stubhead(label = "Index Name") |> 
+  tab_spanner_delim(delim = "_") |> 
+  fmt_number(contains("ICC")) |> 
+  tab_options(column_labels.font.weight = "bold")
 ```
 
 # Age development and Reliability

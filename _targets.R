@@ -81,16 +81,25 @@ list(
   tar_combine(file_test_retest_plot, targets_data[[9]], format = "file"),
   tar_combine(age_dev_stats, targets_data[[10]]),
   tar_combine(file_age_dev_plot, targets_data[[11]], format = "file"),
-  tar_combine(resp_check, targets_data[[12]]),
-  tar_target(max_invalid, 5),
-  tar_target(count_invalid_resp, count_invalid(resp_check)),
-  tar_combine(test_retest_stats_strict, targets_data[[14]]),
-  tar_combine(file_test_retest_plot_strict, targets_data[[15]], format = "file"),
   tar_target(test_retest_sp_data, prep_test_retest_sp(indices_clean)),
   tar_target(test_retest_stats_sp, calc_test_retest(test_retest_sp_data)),
   tar_target(
     test_retest_stats,
     bind_rows(test_retest_stats_basic, test_retest_stats_sp)
+  ),
+  tar_combine(resp_check, targets_data[[12]]),
+  tar_target(max_invalid, 5),
+  tar_target(count_invalid_resp, count_invalid(resp_check)),
+  tar_combine(test_retest_stats_basic_strict, targets_data[[14]]),
+  tar_combine(file_test_retest_plot_strict, targets_data[[15]], format = "file"),
+  tar_target(
+    test_retest_sp_data_strict,
+    prep_test_retest_sp_strict(indices_clean, count_invalid_resp, max_invalid)
+  ),
+  tar_target(test_retest_stats_sp_strict, calc_test_retest(test_retest_sp_data_strict)),
+  tar_target(
+    test_retest_stats_strict,
+    bind_rows(test_retest_stats_basic_strict, test_retest_stats_sp_strict)
   ),
   tar_file(rmd_child_check_index, "archetypes/child_check_index.Rmd"),
   tar_file(file_config_sel, "config/index_selection.csv"),

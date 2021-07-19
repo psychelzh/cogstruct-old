@@ -210,3 +210,21 @@ prep_test_retest_strict <- function(indices_clean, count_invalid_resp,
     prep_test_retest()
 }
 
+#' Prepare test-retest dataset for some special tests
+#'
+#' These tests have A-B versions.
+#'
+#' @title
+#' @param indices_clean
+#' @param count_invalid_resp
+#' @param max_invalid
+#' @return
+#' @author Liang Zhang
+#' @export
+prep_test_retest_sp_strict <- function(indices_clean, count_invalid_resp,
+                                       max_invalid) {
+  count_invalid_resp |>
+    filter(n_invalid <= max_invalid) |>
+    inner_join(indices_clean, by = c("user_id", "occasion")) |>
+    prep_test_retest_sp()
+}
